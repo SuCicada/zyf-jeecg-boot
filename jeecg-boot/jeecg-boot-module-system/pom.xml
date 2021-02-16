@@ -43,7 +43,18 @@
 			<artifactId>jeecg-boot-module-demo</artifactId>
 			<version>${jeecgboot.version}</version>
 		</dependency>
-		<!-- 积木报表 -->
+        <dependency>
+            <groupId>org.jeecgframework.boot</groupId>
+            <artifactId>zyf</artifactId>
+            <version>${jeecgboot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jeecgframework.boot</groupId>
+                    <artifactId>jeecg-boot-module-system</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 积木报表 -->
 		<dependency>
 			<groupId>com.jimureport</groupId>
 			<artifactId>spring-boot-starter-jimureport</artifactId>

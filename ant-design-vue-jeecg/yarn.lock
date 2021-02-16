@@ -873,8 +873,8 @@
 
 "@jeecg/antd-online-mini@2.4.22-beta":
   version "2.4.22-beta"
-  resolved "https://registry.npmjs.org/@jeecg/antd-online-mini/-/antd-online-mini-2.4.22-beta.tgz#616db31a2d9ee3a611d63d4d5459f152284b83d7"
-  integrity sha512-fiivlcw7ovjpIl26vqudqDcf6+rIsn2aP1l853cDGjcBIpnlYVyQ2D/Cdi56Tz1ATdQOXEU8ydmCt2utpPF0LQ==
+  resolved "https://registry.npm.taobao.org/@jeecg/antd-online-mini/download/@jeecg/antd-online-mini-2.4.22-beta.tgz#616db31a2d9ee3a611d63d4d5459f152284b83d7"
+  integrity sha1-YW2zGi2e46YR1j1NVFnxUihLg9c=
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -12036,6 +12036,11 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+yarn@^1.22.10:
+  version "1.22.10"
+  resolved "https://registry.npm.taobao.org/yarn/download/yarn-1.22.10.tgz#c99daa06257c80f8fa2c3f1490724e394c26b18c"
+  integrity sha1-yZ2qBiV8gPj6LD8UkHJOOUwmsYw=
 
 yorkie@^2.0.0:
   version "2.0.0"

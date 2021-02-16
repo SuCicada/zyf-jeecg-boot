@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zyf.scholarship.kc.mapper.ZyfKcMapper">
+    <select id="queryPageList" resultType="java.util.Map">
+        select zyf_kc.id as id, zyf_kc.kc_name as kcName, zyf_zy.zy_name as zyName, zyf_nj.nj_name as njName
+        from zyf_kc, zyf_nj, zyf_zy
+        where
+        zyf_kc.zy_id = zyf_zy.id
+            and zyf_kc.nj_id = zyf_nj.id
+            <if test="query.kcName != null and query.kcName != ''">
+                and zyf_kc.kc_name like #{query.kcName}.trim
+            </if>
+            <if test="query.zyName != null and query.zyName != ''">
+                and zyf_zy.zy_name like #{query.zyName}.trim
+            </if>
+            <if test="query.njName != null and query.njName != ''">
+                and zyf_nj.nj_name like #{query.njName}.trim
+            </if>
+    </select>
+</mapper>
