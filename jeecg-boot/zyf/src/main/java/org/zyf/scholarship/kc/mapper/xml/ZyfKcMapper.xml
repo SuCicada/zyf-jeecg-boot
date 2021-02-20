@@ -8,13 +8,13 @@
         zyf_kc.zy_id = zyf_zy.id
             and zyf_kc.nj_id = zyf_nj.id
             <if test="query.kcName != null and query.kcName != ''">
-                and zyf_kc.kc_name like #{query.kcName}.trim
+                and zyf_kc.kc_name like #{query.kcName}
             </if>
             <if test="query.zyName != null and query.zyName != ''">
-                and zyf_zy.zy_name like #{query.zyName}.trim
+                and zyf_zy.zy_name like #{query.zyName}
             </if>
             <if test="query.njName != null and query.njName != ''">
-                and zyf_nj.nj_name like #{query.njName}.trim
+                and zyf_nj.nj_name like #{query.njName}
             </if>
     </select>
 </mapper>

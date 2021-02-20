@@ -7,10 +7,13 @@
         <where>
             zyf_zy.xy_id = zyf_xy.id
             <if test="query.zyName != null and query.zyName != ''">
-                and zyf_zy.zy_name like #{query.zyName}.trim
+                and zyf_zy.zy_name like #{query.zyName}
             </if>
             <if test="query.xyName != null and query.xyName != ''">
-                and zyf_xy.xy_name like #{query.xyName}.trim
+                and zyf_xy.xy_name like #{query.xyName}
+            </if>
+            <if test="query.zyId != null and query.zyId != ''">
+                and zyf_xy.id = #{query.zyId}
             </if>
         </where>
     </select>

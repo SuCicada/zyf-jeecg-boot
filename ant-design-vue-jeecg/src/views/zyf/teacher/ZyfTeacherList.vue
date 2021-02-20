@@ -166,7 +166,7 @@
             title: '性别',
             align: "center",
             // width: 40,
-            dataIndex: 'sex',
+            dataIndex: 'sexStr',
             sorter: true
           },
           {

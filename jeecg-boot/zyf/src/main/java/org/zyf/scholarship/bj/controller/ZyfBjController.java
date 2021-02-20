@@ -1,46 +1,32 @@
 package org.zyf.scholarship.bj.controller;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.util.oConvertUtils;
-import org.zyf.scholarship.Util;
+import org.jeecg.common.system.vo.LoginUser;
+import org.zyf.scholarship.utils.Util;
 import org.zyf.scholarship.bj.entity.ZyfBj;
 import org.zyf.scholarship.bj.mapper.ZyfBjMapper;
 import org.zyf.scholarship.bj.service.IZyfBjService;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.def.NormalExcelConstants;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
-import org.zyf.scholarship.xy.entity.Xy;
-import org.zyf.scholarship.zy.mapper.ZyfZyMapper;
+import org.zyf.scholarship.utils.service.UtilService;
 
 /**
  * @Description: 班级表
@@ -57,7 +43,10 @@ public class ZyfBjController extends JeecgController<ZyfBj, IZyfBjService> {
 	private IZyfBjService zyfBjService;
     @Resource
     private ZyfBjMapper zyfBjMapper;
-	/**
+    @Autowired
+    private UtilService utilService;
+
+    /**
 	 * 分页列表查询
 	 *
 	 * @param zyfBj
@@ -78,6 +67,13 @@ public class ZyfBjController extends JeecgController<ZyfBj, IZyfBjService> {
 //		IPage<ZyfBj> pageList = zyfBjService.page(page, queryWrapper);
         IPage<Map<String, String>> pageList = new Page<Map<String, String>>(pageNo, pageSize);
         Map<String, String> map = Util.getParamMap(req);
+
+        LoginUser loginUser = Util.getLoginUser();
+        Util.Role role = utilService.who(loginUser.getId());
+        if (role == Util.Role.TEACHER) {
+            map.put("zyId", loginUser.getOrgCode());
+        }
+
         pageList = zyfBjMapper.queryPageList(pageList,map);
 		return Result.OK(pageList);
 	}

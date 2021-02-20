@@ -44,7 +44,7 @@
               :getCalendarContainer="node => node.parentNode"/>
           </a-form-item>
           <a-form-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-            <a-select v-decorator="[ 'sex', {}]" placeholder="请选择性别" :getPopupContainer="(target) => target.parentNode">
+            <a-select v-decorator="[ 'sexStr', {}]" placeholder="请选择性别" :getPopupContainer="(target) => target.parentNode">
               <a-select-option :value="1">男</a-select-option>
               <a-select-option :value="2">女</a-select-option>
             </a-select>
@@ -196,7 +196,7 @@ export default {
       this.model = Object.assign({}, record);
       this.visible = true;
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.model, 'username', 'realname', 'workNo', 'sex', 'zyName'))
+        this.form.setFieldsValue(pick(this.model, 'username', 'realname', 'workNo', 'sex','sexStr', 'zyName','orgCode'))
       })
       const getZyList = (params) => getAction("/zy/zyfZy/queryall", params);
       getZyList().then(res => {
@@ -232,6 +232,7 @@ export default {
     submitForm() {
       const that = this;
       // 触发表单验证
+      this.userId = this.model.id;
       this.form.validateFields((err, values) => {
         if (!err) {
           that.confirmLoading = true;
@@ -246,7 +247,9 @@ export default {
           }
           let formData = Object.assign(this.model, values);
           // 这里很重要, 用组织编号来存储 专业id
-          formData.orgCode = that.zyId
+          if(that.zyId.length > 0){
+            formData.orgCode = that.zyId
+          }
           // 这个角色id是老师id, 很重要不要错
           formData.selectedroles = "1359088351200718850"
           console.log("表单提交数据", formData)

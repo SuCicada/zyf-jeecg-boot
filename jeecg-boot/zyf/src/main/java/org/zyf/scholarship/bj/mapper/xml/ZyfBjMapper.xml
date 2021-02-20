@@ -8,13 +8,16 @@
             zyf_bj.zy_id = zyf_zy.id
             and zyf_bj.nj_id = zyf_nj.id
             <if test="query.bjName != null and query.bjName != ''">
-                and zyf_bj.bj_name like #{query.bjName}.trim
+                and zyf_bj.bj_name like #{query.bjName}
             </if>
             <if test="query.zyName != null and query.zyName != ''">
-                and zyf_zy.zy_name like #{query.zyName}.trim
+                and zyf_zy.zy_name like #{query.zyName}
             </if>
             <if test="query.njName != null and query.njName != ''">
-                and zyf_nj.nj_name like #{query.njName}.trim
+                and zyf_nj.nj_name like #{query.njName}
+            </if>
+            <if test="query.zyId != null and query.zyId != ''">
+                and zyf_zy.id = #{query.zyId}
             </if>
         </where>
     </select>
