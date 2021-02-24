@@ -7,8 +7,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.zyf.scholarship.utils.Util;
 import org.zyf.scholarship.bj.entity.ZyfBj;
@@ -27,6 +29,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.zyf.scholarship.utils.service.UtilService;
+import org.zyf.scholarship.zy.entity.ZyfZy;
 
 /**
  * @Description: 班级表
@@ -70,6 +73,7 @@ public class ZyfBjController extends JeecgController<ZyfBj, IZyfBjService> {
 
         LoginUser loginUser = Util.getLoginUser();
         Util.Role role = utilService.who(loginUser.getId());
+        // 这里很重要, 这里是老师权限必须要判断的专业
         if (role == Util.Role.TEACHER) {
             map.put("zyId", loginUser.getOrgCode());
         }
@@ -78,9 +82,20 @@ public class ZyfBjController extends JeecgController<ZyfBj, IZyfBjService> {
 		return Result.OK(pageList);
 	}
     @RequestMapping(value = "/queryall", method = RequestMethod.GET)
-    public Result<List<ZyfBj>> queryall() {
+    public Result<List<ZyfBj>> queryall(ZyfBj zyfBj,
+                                        HttpServletRequest req) {
         Result<List<ZyfBj>> result = new Result<>();
-        List<ZyfBj> list = zyfBjService.list();
+
+        LoginUser loginUser = Util.getLoginUser();
+
+        QueryWrapper<ZyfBj> queryWrapper = QueryGenerator.initQueryWrapper(zyfBj, req.getParameterMap());
+        Util.Role role = utilService.who(loginUser.getId());
+        // 这里很重要, 这里是老师权限必须要判断的专业
+        if (role == Util.Role.TEACHER) {
+            queryWrapper.eq("zy_id", loginUser.getOrgCode());
+        }
+
+        List<ZyfBj> list = zyfBjService.list(queryWrapper);
         if(list==null||list.size()<=0) {
             result.error500("未找到信息");
         }else {
@@ -89,6 +104,7 @@ public class ZyfBjController extends JeecgController<ZyfBj, IZyfBjService> {
         }
         return result;
     }
+
 	/**
 	 *   添加
 	 *

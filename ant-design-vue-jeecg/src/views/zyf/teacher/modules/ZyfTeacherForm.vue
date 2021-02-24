@@ -250,8 +250,14 @@ export default {
           if(that.zyId.length > 0){
             formData.orgCode = that.zyId
           }
+          // 很重要, 对生日的时间进行格式转换
+          formData.birthday = formData.birthday.format(this.dateFormat);
           // 这个角色id是老师id, 很重要不要错
           formData.selectedroles = "1359088351200718850"
+          // 这里是为了兼容 sex的自动转换汉字
+          if(!formData.sex){
+            formData.sex=formData.sexStr
+          }
           console.log("表单提交数据", formData)
           httpAction(httpurl, formData, method).then((res) => {
             if (res.success) {

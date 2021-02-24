@@ -9,3 +9,6 @@ mybatis 多路径
 [jeecgboot中如何获取当前登录用户的用户名?](https://www.cnblogs.com/97Coding/p/13330110.html)
 
 [[jeecg-boot]获得登录用户的信息](https://blog.csdn.net/gwcgwcjava/article/details/103396746)
+
+2-20 老师管理完成 开始学生管理
+老师角色加入课程管理权限

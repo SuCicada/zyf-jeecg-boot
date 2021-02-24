@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zyf.scholarship.student.mapper.ZyfStudentMapper">
+    <select id="queryPageList" resultType="java.util.Map">
+        select sys_user.id as id, username, realname,work_no as workNo, birthday, sex, bj_name as bjName, org_code as orgCode
+        from sys_user,
+        sys_user_role,
+        zyf_bj
+        where sys_user.id = sys_user_role.user_id
+        and sys_user_role.role_id = '1361357450112102402'
+        and zyf_bj.id = org_code
+        <if test="query.bjName != null and query.bjName != ''">
+            and bj_name like #{query.bjName}
+        </if>
+        <if test="query.realname != null and query.realname != ''">
+            and realname like #{query.realname}
+        </if>
+        <if test="query.username != null and query.username != ''">
+            and username like #{query.username}
+        </if>
+        <if test="query.sex != null and query.sex != ''">
+            and sex like #{query.sex}
+        </if>
+    </select>
+</mapper>
