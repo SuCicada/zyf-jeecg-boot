@@ -13,12 +13,15 @@ public class Util {
     public enum Role {
         OFFICE, TEACHER, STUDENT
     }
+    public static String OFFICE_ID = "1359088297723342849";
+    public static String TEACHER_ID = "1359088351200718850";
+    public static String STUDENT_ID = "1361357450112102402";
 
     public static final Map<String, Role> RoleMap =
         ImmutableMap.<String, Role>builder()
-            .put("1359088297723342849", Role.OFFICE)
-            .put("1359088351200718850", Role.TEACHER)
-            .put("1361357450112102402", Role.STUDENT)
+            .put(OFFICE_ID, Role.OFFICE)
+            .put(TEACHER_ID, Role.TEACHER)
+            .put(STUDENT_ID, Role.STUDENT)
             .build();
 
     public static Role getRoleFromRoleId(String roleId) {

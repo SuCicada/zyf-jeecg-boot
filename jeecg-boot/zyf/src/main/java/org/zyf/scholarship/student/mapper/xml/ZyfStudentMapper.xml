@@ -2,13 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zyf.scholarship.student.mapper.ZyfStudentMapper">
     <select id="queryPageList" resultType="java.util.Map">
-        select sys_user.id as id, username, realname,work_no as workNo, birthday, sex, bj_name as bjName, org_code as orgCode
+        select sys_user.id as id, username, realname,work_no as workNo, birthday, sex, bj_name as bjName, org_code as
+        orgCode
         from sys_user,
         sys_user_role,
         zyf_bj
         where sys_user.id = sys_user_role.user_id
         and sys_user_role.role_id = '1361357450112102402'
         and zyf_bj.id = org_code
+        <if test="query.zyId != null and query.zyId != ''">
+            and zyf_bj.zy_id = #{query.zyId}
+        </if>
         <if test="query.bjName != null and query.bjName != ''">
             and bj_name like #{query.bjName}
         </if>
@@ -20,6 +24,19 @@
         </if>
         <if test="query.sex != null and query.sex != ''">
             and sex like #{query.sex}
+        </if>
+    </select>
+    <select id="queryAllList" resultType="java.util.Map">
+        select sys_user.id as id, username, realname,work_no as workNo, birthday, sex, bj_name as bjName,
+        zyf_bj.id as bjId
+        from sys_user,
+        sys_user_role,
+        zyf_bj
+        where sys_user.id = sys_user_role.user_id
+        and sys_user_role.role_id = #{query.studentRuleId}
+        and org_code =zyf_bj.id
+        <if test="query.zyId != null and query.zyId != ''">
+            and zyf_bj.zy_id = #{query.zyId}
         </if>
     </select>
 </mapper>

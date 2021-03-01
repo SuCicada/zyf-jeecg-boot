@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zyf.scholarship.zc_student.mapper.ZyfZcStudentMapper">
+
+    <select id="queryPageList" resultType="java.util.Map">
+        select zyf_zc_student.id as id,
+        sys_user.id as studentId,
+        sys_user.work_no as workNo,
+        realname,
+        zyf_zc.id as zcId,
+        zc_name as zcName
+        from zyf_zc_student,
+        sys_user,
+        zyf_zc
+        where zyf_zc_student.zc_id = zyf_zc.id
+        and zyf_zc_student.student_id = sys_user.id
+        <if test="query.workNo != null and query.workNo != ''">
+            and sys_user.work_no = #{query.workNo}
+        </if>
+        <if test="query.zcName != null and query.zcName != ''">
+            and zc_name like #{query.zcName}
+        </if>
+        <if test="query.zyId != null and query.zyId != ''">
+            and sys_user.org_code in (
+            select id from zyf_bj
+            where zyf_bj.zy_id = #{query.zyId}
+            )
+        </if>
+    </select>
+</mapper>
