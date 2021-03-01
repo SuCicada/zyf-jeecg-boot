@@ -1,41 +1,29 @@
 <template>
-  <div>
-    <index-chart v-if="indexStyle==1"></index-chart>
-    <index-bdc v-if="indexStyle==2"></index-bdc>
-    <index-task v-if="indexStyle==3"></index-task>
-    <div style="width: 100%;text-align: right;margin-top: 20px">
-      请选择首页样式：
-      <a-radio-group v-model="indexStyle">
-        <a-radio :value="1">统计图表</a-radio>
-        <a-radio :value="2">统计图表2</a-radio>
-        <a-radio :value="3">任务表格</a-radio>
-      </a-radio-group>
-    </div>
-  </div>
+  <a-card :bordered="false" :class="{'abcdefg':true}">
+<!--    <div class="no-print" style="text-align: right">-->
+<!--      <a-button v-print="'#printContent'" ghost type="primary">打印</a-button>-->
+<!--    </div>-->
+    <section ref="print" id="printContent" class="abcdefg">
+      <div style="text-align: center">
+        <p style="font-size: 24px;font-weight: 800">
+          欢迎使用 ZYF奖助学金管理系统
+        </p>
+      </div>
+      <div style="text-align: center">
+      <img alt="" src="../../../public/home.jpg" height="914" width="1166"/>
+
+      </div>
+      <!--签字-->
+    </section>
+  </a-card>
 </template>
 
 <script>
-  import IndexChart from './IndexChart'
-  import IndexTask from "./IndexTask"
-  import IndexBdc from './IndexBdc'
-
-  export default {
-    name: "Analysis",
-    components: {
-      IndexChart,
-      IndexTask,
-      IndexBdc
-    },
-    data() {
-      return {
-        indexStyle:1
-      }
-    },
-    created() {
-
-    },
-    methods: {
-
-    }
-  }
+export default {
+  name: "Analysis"
+}
 </script>
+
+<style scoped>
+
+</style>
