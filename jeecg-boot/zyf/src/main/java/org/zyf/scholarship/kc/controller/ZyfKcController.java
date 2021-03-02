@@ -1,6 +1,7 @@
 package org.zyf.scholarship.kc.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.zyf.scholarship.zc.entity.ZyfZc;
 
- /**
+/**
  * @Description: 课程表
  * @Author: jeecg-boot
  * @Date:   2021-02-15
@@ -76,7 +78,19 @@ public class ZyfKcController extends JeecgController<ZyfKc, IZyfKcService> {
 		zyfKcService.save(zyfKc);
 		return Result.OK("添加成功！");
 	}
-
+	@RequestMapping(value = "/queryall", method = RequestMethod.GET)
+	public Result<List<ZyfKc>> queryall(ZyfKc zyfKc,
+										HttpServletRequest req) {
+		Result<List<ZyfKc>> result = new Result<>();
+		List<ZyfKc> list = zyfKcService.list();
+		if (list == null || list.size() <= 0) {
+			result.error500("未找到信息");
+		} else {
+			result.setResult(list);
+			result.setSuccess(true);
+		}
+		return result;
+	}
 	/**
 	 *  编辑
 	 *

@@ -15,8 +15,8 @@
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="综测名称">
-              <a-input placeholder="综测名称" v-model="queryParam.zcName"></a-input>
+            <a-form-item label="课程名称">
+              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
@@ -42,7 +42,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('综测学生表')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('成绩表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -119,7 +119,7 @@
       </a-table>
     </div>
 
-    <zyf-zc-student-modal ref="modalForm" @ok="modalFormOk"></zyf-zc-student-modal>
+    <zyf-score-modal ref="modalForm" @ok="modalFormOk"></zyf-score-modal>
   </a-card>
 </template>
 
@@ -128,17 +128,17 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import ZyfZcStudentModal from './modules/ZyfZcStudentModal'
+  import ZyfScoreModal from './modules/ZyfScoreModal'
 
   export default {
-    name: 'ZyfZcStudentList',
+    name: 'ZyfScoreList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      ZyfZcStudentModal
+      ZyfScoreModal
     },
     data () {
       return {
-        description: '综测学生表管理页面',
+        description: '成绩表管理页面',
         // 表头
         columns: [
           {
@@ -157,19 +157,19 @@
             dataIndex: 'bjName'
           },
           {
-            title:'学生学号',
-            align:"center",
-            dataIndex: 'workNo'
-          },
-          {
             title:'学生',
             align:"center",
-            dataIndex: 'realname'
+            dataIndex: 'studentName'
           },
           {
-            title:'综测',
+            title:'课程',
             align:"center",
-            dataIndex: 'zcName'
+            dataIndex: 'kcName'
+          },
+          {
+            title:'成绩值',
+            align:"center",
+            dataIndex: 'score'
           },
           {
             title: '操作',
@@ -181,11 +181,11 @@
           }
         ],
         url: {
-          list: "/zc_student/zyfZcStudent/list",
-          delete: "/zc_student/zyfZcStudent/delete",
-          deleteBatch: "/zc_student/zyfZcStudent/deleteBatch",
-          exportXlsUrl: "/zc_student/zyfZcStudent/exportXls",
-          importExcelUrl: "zc_student/zyfZcStudent/importExcel",
+          list: "/score/zyfScore/list",
+          delete: "/score/zyfScore/delete",
+          deleteBatch: "/score/zyfScore/deleteBatch",
+          exportXlsUrl: "/score/zyfScore/exportXls",
+          importExcelUrl: "score/zyfScore/importExcel",
 
         },
         dictOptions:{},
@@ -206,7 +206,8 @@
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'studentId',text:'学生id',dictCode:''})
-        fieldList.push({type:'string',value:'zcId',text:'综测id',dictCode:''})
+        fieldList.push({type:'string',value:'kcId',text:'课程id',dictCode:''})
+        fieldList.push({type:'string',value:'score',text:'成绩值',dictCode:''})
         this.superFieldList = fieldList
       }
     }

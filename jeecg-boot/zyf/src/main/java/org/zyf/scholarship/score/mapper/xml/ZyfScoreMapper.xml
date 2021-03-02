@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.zyf.scholarship.zc_student.mapper.ZyfZcStudentMapper">
+<mapper namespace="org.zyf.scholarship.score.mapper.ZyfScoreMapper">
 
     <select id="queryPageList" resultType="java.util.Map">
-        select zyf_zc_student.id as id,
-        sys_user.id as studentId,
-        sys_user.work_no as workNo,
-        realname,
-        realname as studentName,
-        zyf_zc.id as zcId,
-        zc_name as zcName,
-        bj_name as bjName
-        from zyf_zc_student,
+        select
+        zyf_score.id as id
+        ,zyf_score.score as score
+        ,sys_user.id as studentId
+        ,sys_user.work_no as workNo
+        ,sys_user.realname
+        ,sys_user.realname as studentName
+        ,zyf_kc.id as kcId
+        ,zyf_kc.kc_name as kcName
+        ,zyf_bj.bj_name as bjName
+        from zyf_score,
         sys_user,
-        zyf_zc,
+        zyf_kc,
         zyf_bj
-        where zyf_zc_student.zc_id = zyf_zc.id
-        and zyf_zc_student.student_id = sys_user.id
+        where zyf_score.kc_id = zyf_kc.id
+        and zyf_score.student_id = sys_user.id
         and zyf_bj.id = sys_user.org_code
         <if test="query.workNo != null and query.workNo != ''">
             and sys_user.work_no = #{query.workNo}
@@ -24,8 +26,8 @@
         <if test="query.studentName != null and query.studentName != ''">
             and sys_user.realname like #{query.studentName}
         </if>
-        <if test="query.zcName != null and query.zcName != ''">
-            and zc_name like #{query.zcName}
+        <if test="query.kcName != null and query.kcName != ''">
+            and kc_name like #{query.kcName}
         </if>
         <if test="query.bjName != null and query.kcNamebjName != ''">
             and bj_name like #{query.bjName}
@@ -36,5 +38,6 @@
             where zyf_bj.zy_id = #{query.zyId}
             )
         </if>
+
     </select>
 </mapper>

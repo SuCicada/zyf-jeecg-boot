@@ -4,36 +4,36 @@
       <a-form :form="form" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-item label="学生" :labelCol="labelCol" :wrapperCol="wrapperCol">
-<!--              <a-input v-decorator="['studentId']" placeholder="请输入学生id"  ></a-input>-->
-              <a-select
-                mode="default"
-                style="width: 100%"
-                placeholder="请选择学生"
-                v-model="studentId"
-                v-decorator="[ 'realname',{}]"
-                optionFilterProp="children">
-                <a-select-option v-for="(student,index) in selectedStudent " :key="index.toString()" :value="student.id">
-                  {{ student.bjName }} - {{ student.realname }}
-                </a-select-option>
+            <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="['jxjName']" placeholder="请输入名称"  ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="排名方式" :labelCol="labelCol" :wrapperCol="wrapperCol">
+<!--              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />-->
+              <a-select v-decorator="[ 'sortType', {}]" placeholder="请选择排名方式" :getPopupContainer= "(target) => target.parentNode">
+                <a-select-option :value="1">全校排名</a-select-option>
+                <a-select-option :value="2">专业排名</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="综测" :labelCol="labelCol" :wrapperCol="wrapperCol">
-<!--              <a-input v-decorator="['zcId']" placeholder="请输入综测id"  ></a-input>-->
-              <a-select
-                mode="default"
-                style="width: 100%"
-                placeholder="请选择综测"
-                v-model="zcId"
-                v-decorator="[ 'zcName',{}]"
-                optionFilterProp="children">
-                <a-select-option v-for="(zc,index) in selectedZc " :key="index.toString()" :value="zc.id">
-                  {{ zc.zcName }}
-                </a-select-option>
-              </a-select>
+            <a-form-item label="人数百分比" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="['numRate']" placeholder="请输入人数百分比" style="width: 20%" />%
             </a-form-item>
+          </a-col>
+          <a-col :span="24">
+<!--            <a-row :gutter="24" style="margin-top: 65px;margin-bottom:50px;">-->
+<!--              <a-col :span="12">-->
+            <a-form-item label="文件上传" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-upload v-model="fileList"></j-upload>
+            </a-form-item>
+<!--          </a-col>-->
+<!--              <a-col :span="12">-->
+<!--                选中的值(v-model)：-->
+<!--                <j-ellipsis :value="fileList" :length="30" v-if="fileList.length>0"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
           </a-col>
           <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
             <a-button @click="submitForm">提 交</a-button>
@@ -51,7 +51,7 @@
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'ZyfZcStudentForm',
+    name: 'ZyfJxjForm',
     components: {
     },
     props: {
@@ -89,14 +89,11 @@
         confirmLoading: false,
         validatorRules: {
         },
-        selectedZc: [],
-        zcId: "",
-        selectedStudent: [],
-        studentId: "",
+        fileList: [],
         url: {
-          add: "/zc_student/zyfZcStudent/add",
-          edit: "/zc_student/zyfZcStudent/edit",
-          queryById: "/zc_student/zyfZcStudent/queryById"
+          add: "/jxj/zyfJxj/add",
+          edit: "/jxj/zyfJxj/edit",
+          queryById: "/jxj/zyfJxj/queryById"
         }
       }
     },
@@ -132,16 +129,10 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'studentId','zcId','realname','zcName'))
+          this.form.setFieldsValue(pick(this.model,'jxjName','sortType','numRate','fileList'))
         })
-        const getZcList = (params) => getAction("/zc/zyfZc/queryall", params);
-        getZcList().then(res => {
-          this.selectedZc = res.result
-        })
-        const getStudentList = (params) => getAction("/student/zyfStudent/queryall", params);
-        getStudentList().then(res => {
-          this.selectedStudent = res.result
-        })
+        this.fileList = this.model.fileList.split(",")
+        // console.log(this.model)
       },
       //渲染流程表单数据
       showFlowData(){
@@ -170,10 +161,15 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            // if(that.studentId.length > 0){
-            formData.studentId = that.studentId
-            formData.zcId = that.zcId
-            // }
+            // 很重要, 文件路径记录提交, 并且清除fileList
+            // 这里 fileList已经自动转为字串了, 不用再join了
+            console.log(that.fileList)
+            if(typeof that.fileList === "string"){
+              formData.fileList= that.fileList //.join(",")
+            }else{
+              formData.fileList= that.fileList.join(",")
+            }
+            that.fileList = [];
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -190,7 +186,7 @@
         })
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'studentId','zcId'))
+        this.form.setFieldsValue(pick(row,'jxjName','sortType','numRate'))
       },
     }
   }

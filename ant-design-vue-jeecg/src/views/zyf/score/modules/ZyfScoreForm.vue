@@ -5,7 +5,7 @@
         <a-row>
           <a-col :span="24">
             <a-form-item label="学生" :labelCol="labelCol" :wrapperCol="wrapperCol">
-<!--              <a-input v-decorator="['studentId']" placeholder="请输入学生id"  ></a-input>-->
+<!--              <a-input v-decorator="['studentId']" placeholder="请输入学生"  ></a-input>-->
               <a-select
                 mode="default"
                 style="width: 100%"
@@ -20,19 +20,24 @@
             </a-form-item>
           </a-col>
           <a-col :span="24">
-            <a-form-item label="综测" :labelCol="labelCol" :wrapperCol="wrapperCol">
-<!--              <a-input v-decorator="['zcId']" placeholder="请输入综测id"  ></a-input>-->
+            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">
+<!--              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>-->
               <a-select
                 mode="default"
                 style="width: 100%"
-                placeholder="请选择综测"
-                v-model="zcId"
-                v-decorator="[ 'zcName',{}]"
+                placeholder="请选择课程"
+                v-model="kcId"
+                v-decorator="[ 'kcName',{}]"
                 optionFilterProp="children">
-                <a-select-option v-for="(zc,index) in selectedZc " :key="index.toString()" :value="zc.id">
-                  {{ zc.zcName }}
+                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">
+                  {{ kc.kcName }}
                 </a-select-option>
               </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="成绩值" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="['score']" placeholder="请输入成绩值" style="width: 100%" />
             </a-form-item>
           </a-col>
           <a-col v-if="showFlowSubmitButton" :span="24" style="text-align: center">
@@ -51,7 +56,7 @@
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'ZyfZcStudentForm',
+    name: 'ZyfScoreForm',
     components: {
     },
     props: {
@@ -89,14 +94,14 @@
         confirmLoading: false,
         validatorRules: {
         },
-        selectedZc: [],
-        zcId: "",
+        selectedKc: [],
+        kcId: "",
         selectedStudent: [],
         studentId: "",
         url: {
-          add: "/zc_student/zyfZcStudent/add",
-          edit: "/zc_student/zyfZcStudent/edit",
-          queryById: "/zc_student/zyfZcStudent/queryById"
+          add: "/score/zyfScore/add",
+          edit: "/score/zyfScore/edit",
+          queryById: "/score/zyfScore/queryById"
         }
       }
     },
@@ -132,11 +137,11 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'studentId','zcId','realname','zcName'))
+          this.form.setFieldsValue(pick(this.model,'studentId','kcId','score','realname','kcName'))
         })
-        const getZcList = (params) => getAction("/zc/zyfZc/queryall", params);
-        getZcList().then(res => {
-          this.selectedZc = res.result
+        const getKcList = (params) => getAction("/kc/zyfKc/queryall", params);
+        getKcList().then(res => {
+          this.selectedKc = res.result
         })
         const getStudentList = (params) => getAction("/student/zyfStudent/queryall", params);
         getStudentList().then(res => {
@@ -170,10 +175,8 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            // if(that.studentId.length > 0){
             formData.studentId = that.studentId
-            formData.zcId = that.zcId
-            // }
+            formData.kcId = that.kcId
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -190,7 +193,7 @@
         })
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'studentId','zcId'))
+        this.form.setFieldsValue(pick(row,'studentId','kcId','score'))
       },
     }
   }
