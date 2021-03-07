@@ -6,7 +6,7 @@
     :closable="false"
     @close="close"
     :visible="visible">
-    <zyf-jxj-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit" normal></zyf-jxj-form>
+    <zyf-jxj-app-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit" normal></zyf-jxj-app-form>
     <div class="drawer-footer">
       <a-button @click="handleCancel" style="margin-bottom: 0;">关闭</a-button>
       <a-button v-if="!disableSubmit"  @click="handleOk" type="primary" style="margin-bottom: 0;">提交</a-button>
@@ -16,12 +16,12 @@
 
 <script>
 
-  import ZyfJxjForm from './ZyfJxjForm'
+  import ZyfJxjAppForm from './ZyfJxjAppForm'
 
   export default {
-    name: 'ZyfJxjModal',
+    name: 'ZyfJxjAppModal',
     components: {
-      ZyfJxjForm
+      ZyfJxjAppForm
     },
     data () {
       return {

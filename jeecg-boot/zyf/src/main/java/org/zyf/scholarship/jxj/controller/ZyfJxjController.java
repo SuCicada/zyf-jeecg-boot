@@ -35,8 +35,9 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.zyf.scholarship.kc.entity.ZyfKc;
 
- /**
+/**
  * @Description: 奖学金
  * @Author: jeecg-boot
  * @Date:   2021-02-23
@@ -49,7 +50,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 	@Autowired
 	private IZyfJxjService zyfJxjService;
-	
+
 	/**
 	 * 分页列表查询
 	 *
@@ -71,7 +72,21 @@ public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 		IPage<ZyfJxj> pageList = zyfJxjService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	@RequestMapping(value = "/queryall", method = RequestMethod.GET)
+	public Result<List<ZyfJxj>> queryall(ZyfJxj zyfJxj,
+										HttpServletRequest req) {
+		Result<List<ZyfJxj>> result = new Result<>();
+		List<ZyfJxj> list = zyfJxjService
+			.list();
+		if (list == null || list.size() <= 0) {
+			result.error500("未找到信息");
+		} else {
+			result.setResult(list);
+			result.setSuccess(true);
+		}
+		return result;
+	}
+
 	/**
 	 *   添加
 	 *
@@ -85,7 +100,7 @@ public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 		zyfJxjService.save(zyfJxj);
 		return Result.OK("添加成功！");
 	}
-	
+
 	/**
 	 *  编辑
 	 *
@@ -99,7 +114,7 @@ public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 		zyfJxjService.updateById(zyfJxj);
 		return Result.OK("编辑成功!");
 	}
-	
+
 	/**
 	 *   通过id删除
 	 *
@@ -113,7 +128,7 @@ public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 		zyfJxjService.removeById(id);
 		return Result.OK("删除成功!");
 	}
-	
+
 	/**
 	 *  批量删除
 	 *
@@ -127,7 +142,7 @@ public class ZyfJxjController extends JeecgController<ZyfJxj, IZyfJxjService> {
 		this.zyfJxjService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功!");
 	}
-	
+
 	/**
 	 * 通过id查询
 	 *

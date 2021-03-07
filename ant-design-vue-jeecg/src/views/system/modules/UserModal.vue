@@ -22,8 +22,9 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
-        <a-form-item label="用户账号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-form-item label="用户账号" :labelCol="labelCol" :wrapperCol="wrapperCol">readOnly
           <a-input placeholder="请输入用户账号" v-decorator.trim="[ 'username', validatorRules.username]" :readOnly="!!model.id"/>
+
         </a-form-item>
 
         <template v-if="!model.id">

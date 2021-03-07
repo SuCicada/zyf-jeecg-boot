@@ -8,17 +8,17 @@
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
     cancelText="关闭">
-    <zyf-jxj-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></zyf-jxj-form>
+    <zyf-jxj-app-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></zyf-jxj-app-form>
   </j-modal>
 </template>
 
 <script>
 
-  import ZyfJxjForm from './ZyfJxjForm'
+  import ZyfJxjAppForm from './ZyfJxjAppForm'
   export default {
-    name: 'ZyfJxjModal',
+    name: 'ZyfJxjAppModal',
     components: {
-      ZyfJxjForm
+      ZyfJxjAppForm
     },
     data () {
       return {

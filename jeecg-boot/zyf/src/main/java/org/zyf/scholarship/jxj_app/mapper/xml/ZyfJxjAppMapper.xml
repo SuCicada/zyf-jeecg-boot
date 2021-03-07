@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zyf.scholarship.jxj_app.mapper.ZyfJxjAppMapper">
+    <select id="queryPageList" resultType="java.util.Map">
+        select zyf_jxj_app.id
+        , zyf_jxj_app.teacher_check as teacherCheck
+        , zyf_jxj_app.office_check as officeCheck
+        , zyf_jxj_app.accepted as accepted
+        , zyf_jxj.jxj_name as jxjName
+        , sys_user.realname as realname
+        , sys_user.realname as studentName
+        , zyf_bj.bj_name as bjName
+        from zyf_jxj_app,
+        zyf_jxj,
+        sys_user,
+        zyf_bj
+        where zyf_jxj_app.jxj_id = zyf_jxj.id
+        and zyf_jxj_app.student_id = sys_user.id
+        and sys_user.org_code = zyf_bj.id
+        <!--   只有教务处的特有规则,
+            只有老师申请通过之后, 教务处才能看到申请
+        -->
+        <if test="query.role == 'OFFICE' ">
+            and zyf_jxj_app.teacher_check = 1
+        </if>
+        <!-- 老师的特有规则, 只能显示老师的专业的学生的申请   -->
+        <if test="query.zyId != null and query.zyId != ''">
+            and sys_user.org_code in (
+            select id from zyf_bj
+            where zyf_bj.zy_id = #{query.zyId}
+            )
+        </if>
+        <if test="query.studentId != null and query.studentId != ''">
+            and sys_user.id = #{query.studentId}
+        </if>
+    </select>
+</mapper>
