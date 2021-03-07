@@ -42,7 +42,6 @@ import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.zyf.scholarship.utils.Util;
 import org.zyf.scholarship.utils.service.UtilService;
-import org.zyf.scholarship.zc_student.mapper.ZyfZcStudentMapper;
 
 /**
  * @Description: 成绩表

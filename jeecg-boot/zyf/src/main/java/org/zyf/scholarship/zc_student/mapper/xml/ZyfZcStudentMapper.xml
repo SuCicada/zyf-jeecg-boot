@@ -27,7 +27,7 @@
         <if test="query.zcName != null and query.zcName != ''">
             and zc_name like #{query.zcName}
         </if>
-        <if test="query.bjName != null and query.kcNamebjName != ''">
+        <if test="query.bjName != null and query.bjName != ''">
             and bj_name like #{query.bjName}
         </if>
         <if test="query.zyId != null and query.zyId != ''">

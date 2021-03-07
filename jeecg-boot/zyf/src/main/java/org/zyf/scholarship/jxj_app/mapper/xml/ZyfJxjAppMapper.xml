@@ -30,8 +30,26 @@
             where zyf_bj.zy_id = #{query.zyId}
             )
         </if>
+        <!-- 学生的特有规则, 只能显示学生自己的   -->
         <if test="query.studentId != null and query.studentId != ''">
             and sys_user.id = #{query.studentId}
+        </if>
+
+        <!-- 以下是查询条件判断  -->
+        <if test="query.workNo != null and query.workNo != ''">
+            and sys_user.work_no = #{query.workNo}
+        </if>
+        <if test="query.studentName != null and query.studentName != ''">
+            and sys_user.realname like #{query.studentName}
+        </if>
+        <if test="query.bjName != null and query.bjName != ''">
+            and zyf_bj.bj_name like #{query.bjName}
+        </if>
+        <if test="query.teacherCheck != null and query.teacherCheck != ''">
+            and zyf_jxj_app.teacher_check = #{query.teacherCheck}
+        </if>
+        <if test="query.officeCheck != null and query.officeCheck != ''">
+            and zyf_jxj_app.office_check = #{query.officeCheck}
         </if>
     </select>
 </mapper>

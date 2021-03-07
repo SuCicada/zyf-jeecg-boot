@@ -4,6 +4,52 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="学生学号">
+              <a-input placeholder="学生学号" v-model="queryParam.workNo"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="学生姓名">
+              <a-input placeholder="学生姓名" v-model="queryParam.studentName"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="班级名称">
+              <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="辅导员审核情况">
+              <!--                <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>-->
+              <a-select v-decorator="[ 'teacherCheck', {}]"
+                        v-model="queryParam.teacherCheck"
+                        placeholder="请选择审核情况查询" :getPopupContainer="(target) => target.parentNode">
+                <a-select-option :value="0">未审核</a-select-option>
+                <a-select-option :value="1">审核通过</a-select-option>
+                <a-select-option :value="2">审核拒绝</a-select-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item label="教务处审核情况">
+              <a-select v-decorator="[ 'officeCheck', {}]"
+                        v-model="queryParam.officeCheck"
+                        placeholder="请选择审核情况查询" :getPopupContainer="(target) => target.parentNode">
+                <a-select-option :value="0">未审核</a-select-option>
+                <a-select-option :value="1">审核通过</a-select-option>
+                <a-select-option :value="2">审核拒绝</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -12,14 +58,14 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">开始申请</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('奖学金申请')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
-                @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+<!--      <a-button type="primary" icon="download" @click="handleExportXls('奖学金申请')">导出</a-button>-->
+<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+<!--                @change="handleImportExcel">-->
+<!--        <a-button type="primary" icon="import">导入</a-button>-->
+<!--      </a-upload>-->
       <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal"
-                     @handleSuperQuery="handleSuperQuery"></j-super-query>
+<!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal"-->
+<!--                     @handleSuperQuery="handleSuperQuery"></j-super-query>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
