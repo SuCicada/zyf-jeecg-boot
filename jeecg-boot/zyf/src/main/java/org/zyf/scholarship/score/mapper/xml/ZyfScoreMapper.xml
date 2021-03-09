@@ -39,5 +39,30 @@
             )
         </if>
 
+        <!--    排序 -->
+        <if test="query.column != null and query.column != '' and
+                  query.order != null and query.order != ''  ">
+            order by ${query.column} ${query.order}
+        </if>
+    </select>
+    <!-- 班级成绩排名图表数据 -->
+    <select id="queryBjScoreSortChart" resultType="java.util.Map">
+        select zyf_bj.bj_name       as bjName,
+               avg(zyf_score.score) as score
+        from zyf_score,
+             sys_user,
+             zyf_kc,
+             zyf_bj
+        where zyf_score.kc_id = zyf_kc.id
+          and zyf_score.student_id = sys_user.id
+          and zyf_bj.id = sys_user.org_code
+          and zyf_bj.nj_id = #{query.njId}
+          and sys_user.org_code in (
+            select id
+            from zyf_bj
+            where zyf_bj.zy_id = #{query.zyId}
+        )
+        group by zyf_bj.id
+        order by score desc
     </select>
 </mapper>

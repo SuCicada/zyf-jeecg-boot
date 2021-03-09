@@ -170,6 +170,7 @@
             title:'成绩值',
             align:"center",
             dataIndex: 'score'
+            ,sorter: true
           },
           {
             title: '操作',
@@ -202,6 +203,8 @@
     },
     methods: {
       initDictConfig(){
+        // this.url.list += "?column=score&order=asc"
+        console.log(this.url.list)
       },
       getSuperFieldList(){
         let fieldList=[];

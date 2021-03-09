@@ -1,5 +1,6 @@
 package org.zyf.scholarship.score.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
+import org.zyf.scholarship.jxj.entity.ZyfJxj;
 import org.zyf.scholarship.score.entity.ZyfScore;
 import org.zyf.scholarship.score.mapper.ZyfScoreMapper;
 import org.zyf.scholarship.score.service.IZyfScoreService;
@@ -91,6 +93,32 @@ public class ZyfScoreController extends JeecgController<ZyfScore, IZyfScoreServi
 
 		return Result.OK(pageList);
 	}
+
+	/**
+	 *  班级成绩排名图表数据
+	 */
+	@RequestMapping(value = "/queryBjScoreSortChart", method = RequestMethod.GET)
+	public Result<List<Map<String, String>>> queryBjScoreSortChart(HttpServletRequest req) {
+
+		Result<List<Map<String, String>>> result = new Result<>();
+		List<Map<String, String>> list = new ArrayList<>();
+		Map<String, String> map = Util.getParamMap(req);
+		LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+		Util.Role role = utilService.who(loginUser.getId());
+		if (role == Util.Role.TEACHER) {
+			map.put("zyId", loginUser.getOrgCode());
+		}
+		list = zyfZcScoreMapper.queryBjScoreSortChart(list, map);
+
+		if (list == null || list.size() <= 0) {
+			result.error500("未找到信息");
+		} else {
+			result.setResult(list);
+			result.setSuccess(true);
+		}
+		return result;
+	}
+
 
 	/**
 	 *   添加
