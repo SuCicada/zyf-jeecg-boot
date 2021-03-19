@@ -16,5 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ZyfJxjAppMapper extends BaseMapper<ZyfJxjApp> {
     IPage<Map<String, Object>> queryPageList(IPage<Map<String, Object>> a, Map<String, String> query);
-
+    void autoInitAccepted(Map<String, String> query);
 }

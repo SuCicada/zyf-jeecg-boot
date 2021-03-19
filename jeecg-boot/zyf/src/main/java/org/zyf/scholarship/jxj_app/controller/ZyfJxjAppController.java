@@ -41,6 +41,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.zyf.scholarship.score.mapper.ZyfScoreMapper;
+import org.zyf.scholarship.student.entity.ZyfStudent;
 import org.zyf.scholarship.utils.Util;
 import org.zyf.scholarship.utils.service.UtilService;
 
@@ -95,6 +96,14 @@ public class ZyfJxjAppController extends JeecgController<ZyfJxjApp, IZyfJxjAppSe
         pageList = zyfZcJxjAppMapper.queryPageList(pageList, map);
 
         return Result.OK(pageList);
+    }
+
+    @RequestMapping(value = "/autoInitAccepted", method = RequestMethod.GET)
+    public Result autoInitAccepted() {
+        Result result = new Result<>();
+        zyfZcJxjAppMapper
+
+        return result;
     }
 
     /**

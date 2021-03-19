@@ -13,6 +13,8 @@
         ,zyf_kc.id as kcId
         ,zyf_kc.kc_name as kcName
         ,zyf_bj.bj_name as bjName
+        <!--    排序用 -->
+        ,zyf_score.create_time as createTime
         from zyf_score,
         sys_user,
         zyf_kc,
@@ -47,6 +49,17 @@
     </select>
     <!-- 班级成绩排名图表数据 -->
     <select id="queryBjScoreSortChart" resultType="java.util.Map">
+        CREATE OR replace view temp_score as (
+                                             select sys_user.id    as studentId
+                                                  , zyf_score.score
+                                                  , zyf_kc.kc_name as kcName
+                                             from zyf_score,
+                                                  sys_user,
+                                                  zyf_kc
+                                             where zyf_score.student_id = sys_user.id
+                                               and zyf_score.kc_id = zyf_kc.id
+                                               and zyf_kc.id != 1
+                                                 );
         select zyf_bj.bj_name       as bjName,
                avg(zyf_score.score) as score
         from zyf_score,

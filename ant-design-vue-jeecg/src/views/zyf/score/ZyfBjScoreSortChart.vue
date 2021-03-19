@@ -35,10 +35,20 @@
               </a-select>
             </a-form-item>
           </a-col>
+          <a-col :span="10">
+            <a-form-item label="成绩模式" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />-->
+              <a-select v-decorator="[ 'scoreType', {}]" placeholder="请选择成绩模式"
+                        :getPopupContainer="(target) => target.parentNode">
+                <a-select-option :value="1">原始成绩</a-select-option>
+                <a-select-option :value="2">综测成绩</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="submitForm" icon="search">查询</a-button>
-              <a-button type="primary" @click="submitForm" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -47,11 +57,11 @@
     <a-tabs defaultActiveKey="1">
       <!-- 柱状图 -->
       <a-tab-pane tab="柱状图" key="1">
-        <bar title="销售额排行" :dataSource="barData" :height="height"/>
+        <bar title="单专业年级班级成绩排名 柱状图" :dataSource="barData" :height="height"/>
       </a-tab-pane>
       <!-- 多列柱状图 -->
       <a-tab-pane tab="多列柱状图" key="2">
-        <bar-multid title="多列柱状图" :height="height"/>
+        <bar-multid title="单专业年级班级成绩排名 多列柱状图" :height="height"/>
       </a-tab-pane>
       <!-- 迷你柱状图 -->
       <a-tab-pane tab="迷你柱状图" key="3">
@@ -59,7 +69,7 @@
       </a-tab-pane>
       <!-- 面积图 -->
       <a-tab-pane tab="面积图" key="4">
-        <area-chart-ty title="销售额排行" :dataSource="areaData" x="月份" y="销售额" :height="height"/>
+        <area-chart-ty title="单专业年级班级成绩排名 面积图" :dataSource="areaData" x="月份" y="销售额" :height="height"/>
       </a-tab-pane>
       <!-- 迷你面积图 -->
       <a-tab-pane tab="迷你面积图" key="5">
@@ -68,49 +78,49 @@
         </div>
       </a-tab-pane>
       <!-- 多行折线图 -->
-      <a-tab-pane tab="多行折线图" key="6">
-        <line-chart-multid title="多行折线图" :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="多行折线图" key="6">-->
+      <!--        <line-chart-multid title="多行折线图" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 饼图 -->
-      <a-tab-pane tab="饼图" key="7">
-        <pie title="饼图" :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="饼图" key="7">-->
+      <!--        <pie title="饼图" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 雷达图 -->
-      <a-tab-pane tab="雷达图" key="8">
-        <radar title="雷达图" :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="雷达图" key="8">-->
+      <!--        <radar title="雷达图" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 仪表盘 -->
-      <a-tab-pane tab="仪表盘" key="9">
-        <dash-chart-demo title="仪表盘" :value="9" :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="仪表盘" key="9">-->
+      <!--        <dash-chart-demo title="仪表盘" :value="9" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 进度条 -->
-      <a-tab-pane tab="进度条" key="10">
-        <mini-progress :percentage="30" :target="40" :height="30"/>
-        <mini-progress :percentage="51" :target="60" :height="30" color="#FFA500"/>
-        <mini-progress :percentage="66" :target="80" :height="30" color="#1E90FF"/>
-        <mini-progress :percentage="74" :target="70" :height="30" color="#FF4500"/>
-        <mini-progress :percentage="92" :target="100" :height="30" color="#49CC49"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="进度条" key="10">-->
+      <!--        <mini-progress :percentage="30" :target="40" :height="30"/>-->
+      <!--        <mini-progress :percentage="51" :target="60" :height="30" color="#FFA500"/>-->
+      <!--        <mini-progress :percentage="66" :target="80" :height="30" color="#1E90FF"/>-->
+      <!--        <mini-progress :percentage="74" :target="70" :height="30" color="#FF4500"/>-->
+      <!--        <mini-progress :percentage="92" :target="100" :height="30" color="#49CC49"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 排名列表 -->
       <a-tab-pane tab="排名列表" key="11">
-        <rank-list title="门店销售排行榜" :list="rankList" style="width: 600px;margin: 0 auto;"/>
+        <rank-list title="单专业年级班级成绩排名" :list="rankList" style="width: 600px;margin: 0 auto;"/>
       </a-tab-pane>
       <!-- TransferBar -->
-      <a-tab-pane tab="TransferBar" key="12">
-        <transfer-bar title="年度消耗流量一览表" :data="barData" x="月份" y="流量(Mb)" :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="TransferBar" key="12">-->
+      <!--        <transfer-bar title="年度消耗流量一览表" :data="barData" x="月份" y="流量(Mb)" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- Trend -->
-      <a-tab-pane tab="Trend" key="13">
-        <trend title="Trend" term="Trend：" :percentage="30"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="Trend" key="13">-->
+      <!--        <trend title="Trend" term="Trend：" :percentage="30"/>-->
+      <!--      </a-tab-pane>-->
       <!-- Liquid -->
-      <a-tab-pane tab="Liquid" key="14">
-        <liquid :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="Liquid" key="14">-->
+      <!--        <liquid :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- BarAndLine -->
-      <a-tab-pane tab="BarAndLine" key="15">
-        <bar-and-line :height="height"/>
-      </a-tab-pane>
+      <!--      <a-tab-pane tab="BarAndLine" key="15">-->
+      <!--        <bar-and-line :height="height"/>-->
+      <!--      </a-tab-pane>-->
     </a-tabs>
   </a-card>
 </template>
@@ -166,11 +176,11 @@ export default {
     }
   },
   created() {
-    setTimeout(() => {
-      this.loadBarData()
-      this.loadAreaData()
-      this.loadRankListData()
-    }, 100)
+    // setTimeout(() => {
+    //   this.loadBarData()
+    //   this.loadAreaData()
+    //   this.loadRankListData()
+    // }, 100)
     this.initSelected()
   },
   methods: {
@@ -209,8 +219,6 @@ export default {
       this.rankList = this.loadData('name', 'total', 2000, 100, '北京朝阳 ', ' 号店')
     },
     submitForm() {
-
-
       let param = {
         zyId: this.zyId,
         njId: this.njId
@@ -218,7 +226,20 @@ export default {
       getAction("/score/zyfScore/queryBjScoreSortChart", param)
           .then(res => {
             // this.selectedZy = res.result
-            console.log(res)
+            console.log(res['result'])
+            if (res['result']) {
+              this.rankList =
+                  res['result'].map(a => {
+                    return {'name': a['bjName'], 'total': a['score']}
+                  })
+              this.areaData = this.barData =
+                  res['result'].map(a => {
+                    return {'x': a['bjName'], 'y': a['score']}
+                  })
+            } else {
+              this.rankList = this.areaData = this.barData = []
+            }
+            // console.log(this.loadData('x', 'y', 1000, 200))
           })
     }
   }

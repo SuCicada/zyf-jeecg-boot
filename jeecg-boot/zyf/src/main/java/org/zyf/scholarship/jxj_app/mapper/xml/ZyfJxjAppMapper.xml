@@ -7,16 +7,23 @@
         , zyf_jxj_app.office_check as officeCheck
         , zyf_jxj_app.accepted as accepted
         , zyf_jxj.jxj_name as jxjName
+        <!-- 学生的信息   -->
         , sys_user.realname as realname
         , sys_user.realname as studentName
         , zyf_bj.bj_name as bjName
+        , zyf_nj.nj_name as njName
+        , zyf_zy.zy_name as zyName
         from zyf_jxj_app,
         zyf_jxj,
         sys_user,
-        zyf_bj
+        zyf_bj,
+        zyf_zy,
+        zyf_nj
         where zyf_jxj_app.jxj_id = zyf_jxj.id
         and zyf_jxj_app.student_id = sys_user.id
         and sys_user.org_code = zyf_bj.id
+        and zyf_nj.id = zyf_bj.nj_id
+        and zyf_zy.id = zyf_bj.zy_id
         <!--   只有教务处的特有规则,
             只有老师申请通过之后, 教务处才能看到申请
         -->
@@ -51,5 +58,15 @@
         <if test="query.officeCheck != null and query.officeCheck != ''">
             and zyf_jxj_app.office_check = #{query.officeCheck}
         </if>
+        <if test="query.njName != null and query.njName != ''">
+            and zyf_nj.nj_name = #{query.njName}
+        </if>
+        <if test="query.zyName != null and query.zyName != ''">
+            and zyf_zy.zy_name = #{query.zyName}
+        </if>
+    </select>
+
+
+    <select id="autoInitAccepted" resultType="java.util.Map">
     </select>
 </mapper>
