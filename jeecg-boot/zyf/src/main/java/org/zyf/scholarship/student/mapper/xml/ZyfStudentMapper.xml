@@ -25,6 +25,9 @@
         <if test="query.sex != null and query.sex != ''">
             and sex like #{query.sex}
         </if>
+        <if test="query.workNo != null and query.workNo != ''">
+            and work_no like #{query.workNo}
+        </if>
     </select>
     <select id="queryAllList" resultType="java.util.Map">
         select sys_user.id as id, username, realname,work_no as workNo, birthday, sex, bj_name as bjName,

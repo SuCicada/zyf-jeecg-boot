@@ -144,7 +144,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -159,7 +159,7 @@
             dataIndex: 'zyName'
           },
           {
-            title:'学院',
+            title:'所属学院',
             align:"center",
             dataIndex: 'xyName'
           },

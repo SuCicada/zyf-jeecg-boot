@@ -21,4 +21,6 @@ public interface ZyfScoreMapper extends BaseMapper<ZyfScore> {
      * 班级成绩排名图表数据
      */
     List<Map<String, String>> queryBjScoreSortChart(List<Map<String, String>> a, Map<String, String> query);
+
+    List<Map<String, Object>> queryZcScoreList(List<Map<String, Object>> a, Map<String, String> query);
 }

@@ -4,6 +4,46 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :md="6" :sm="12">
+            <a-form-item label="账号">
+              <!--<a-input placeholder="请输入账号查询" v-model="queryParam.username"></a-input>-->
+              <j-input placeholder="输入账号模糊查询" v-model="queryParam.username"></j-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="真实名字">
+              <a-input placeholder="请输入真实名字" v-model="queryParam.realname"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="学生学号">
+              <a-input placeholder="请输入学生学号" v-model="queryParam.student"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="性别">
+              <a-select v-model="queryParam.sex" placeholder="请选择性别">
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="1">男</a-select-option>
+                <a-select-option value="2">女</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="班级名称">
+              <a-input placeholder="请输入班级名称" v-model="queryParam.bjName"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -112,7 +152,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -132,26 +172,26 @@
           //   dataIndex: 'bjId'
           // },
           {
-            title: '用户账号',
+            title: '学生账号',
             align: "center",
             dataIndex: 'username',
             // width: 60,
             sorter: true
           },
           {
-            title: '用户姓名',
+            title: '学生姓名',
             align: "center",
             // width: 60,
             dataIndex: 'realname',
           },
           {
-            title: '学号',
+            title: '学生学号',
             align: "center",
             // width: 60,
             dataIndex: 'workNo',
           },
           {
-            title:'班级',
+            title:'所属班级',
             align:"center",
             dataIndex: 'bjName',
             // width: 80,

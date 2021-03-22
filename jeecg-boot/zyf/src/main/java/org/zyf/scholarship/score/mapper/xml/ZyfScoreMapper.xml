@@ -31,7 +31,7 @@
         <if test="query.kcName != null and query.kcName != ''">
             and kc_name like #{query.kcName}
         </if>
-        <if test="query.bjName != null and query.kcNamebjName != ''">
+        <if test="query.bjName != null and query.ebjName != ''">
             and bj_name like #{query.bjName}
         </if>
         <if test="query.zyId != null and query.zyId != ''">
@@ -49,17 +49,20 @@
     </select>
     <!-- 班级成绩排名图表数据 -->
     <select id="queryBjScoreSortChart" resultType="java.util.Map">
-        CREATE OR replace view temp_score as (
-                                             select sys_user.id    as studentId
-                                                  , zyf_score.score
-                                                  , zyf_kc.kc_name as kcName
-                                             from zyf_score,
-                                                  sys_user,
-                                                  zyf_kc
-                                             where zyf_score.student_id = sys_user.id
-                                               and zyf_score.kc_id = zyf_kc.id
-                                               and zyf_kc.id != 1
-                                                 );
+        set @@sql_mode =
+                'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+        CREATE OR replace view temp_score as
+        (
+        select sys_user.id    as studentId
+             , zyf_score.score
+             , zyf_kc.kc_name as kcName
+        from zyf_score,
+             sys_user,
+             zyf_kc
+        where zyf_score.student_id = sys_user.id
+          and zyf_score.kc_id = zyf_kc.id
+          and zyf_kc.id != 1
+            );
         select zyf_bj.bj_name       as bjName,
                avg(zyf_score.score) as score
         from zyf_score,
@@ -77,5 +80,99 @@
         )
         group by zyf_bj.id
         order by score desc
+    </select>
+
+    <!-- 真实综测成绩, 带排序-->
+    <select id="queryZcScoreList" resultType="java.util.Map">
+        set @@sql_mode =
+        'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+
+        <!--  班级信息 -->
+        CREATE OR replace view temp_bj as
+        (
+        select zyf_bj.bj_name as bjName
+        , sys_user.id as studentId
+        , sys_user.realname as studentName
+        , sys_user.work_no as studentWorkNo
+        , zyf_zy.zy_name as zyName
+        , zyf_zy.id as zyId
+        , zyf_nj.nj_name as njName
+        , zyf_nj.id as njId
+        from sys_user,
+        zyf_bj,
+        zyf_zy,
+        zyf_nj
+        where true
+        and zyf_bj.id = sys_user.org_code
+        and zyf_bj.nj_id = zyf_nj.id
+        and zyf_bj.zy_id = zyf_zy.id
+        and zyf_bj.nj_id != 1
+        and zyf_bj.zy_id != 1
+        );
+
+        <!--  sore -->
+        CREATE OR replace view temp_score as
+        (
+        select sys_user.id as studentId
+        , zyf_score.score
+        , zyf_kc.kc_name as kcName
+        from zyf_score,
+        sys_user,
+        zyf_kc
+        where zyf_score.student_id = sys_user.id
+        and zyf_score.kc_id = zyf_kc.id
+        and zyf_kc.id != 1
+        );
+        <!--  综测 -->
+        CREATE OR replace view temp_zc as
+        (
+        select sys_user.id as studentId
+        , sum(zyf_zc.score) as zcScore
+        from sys_user,
+        zyf_zc,
+        zyf_zc_student
+        where zyf_zc_student.student_id = sys_user.id
+        and zyf_zc_student.zc_id = zyf_zc.id
+        group by studentId
+        );
+
+        select studentId,
+        avgScore,
+        zcScore,
+        (CASE
+        WHEN zcScore &lt; 21 THEN 21
+        WHEN zcScore &gt; 35 THEN 35
+        ELSE zcScore END) + avgScore * 0.65
+        as realScore,
+        bjName,
+        zyName,
+        njName,
+        studentName,
+        studentWorkNo
+        from (select temp_score.studentId as studentId
+        , avg(score) as avgScore
+        , IF(temp_zc.zcScore is null, 0, temp_zc.zcScore)+21 zcScore
+        , temp_bj.bjName as bjName
+        , temp_bj.zyName as zyName
+        , temp_bj.njName as njName
+        , temp_bj.studentName as studentName
+        , temp_bj.studentWorkNo as studentWorkNo
+        from temp_score
+        left join temp_zc
+        on temp_zc.studentId = temp_score.studentId
+        join temp_bj
+        on temp_score.studentId = temp_bj.studentId
+        where true
+        <if test="query.studentId != null and query.studentId != ''">
+            and temp_score.studentId = #{query.studentId}
+        </if>
+        <if test="query.sortType == '2' ">
+            <!-- 1全校/ 2专业 -->
+            and temp_bj.zyId = #{query.zyId}
+            and temp_bj.njId = #{query.njId}
+        </if>
+        group by temp_score.studentId
+        ) a
+        order by realScore desc
     </select>
 </mapper>

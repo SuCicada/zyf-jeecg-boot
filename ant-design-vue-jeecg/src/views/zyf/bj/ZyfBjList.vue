@@ -127,7 +127,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -142,12 +142,12 @@
             dataIndex: 'bjName'
           },
           {
-            title:'年级',
+            title:'所属年级',
             align:"center",
             dataIndex: 'njName'
           },
           {
-            title:'专业',
+            title:'所属专业',
             align:"center",
             dataIndex: 'zyName'
           },

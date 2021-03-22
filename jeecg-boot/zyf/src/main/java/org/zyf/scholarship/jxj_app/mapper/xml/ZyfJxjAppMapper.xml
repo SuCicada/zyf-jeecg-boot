@@ -66,7 +66,33 @@
         </if>
     </select>
 
-
-    <select id="autoInitAccepted" resultType="java.util.Map">
+    <!--#  这个能查到待发放的学生的id -->
+    <select id="queryAccepted" resultType="java.util.Map">
+        select zyf_jxj_app.id
+             , zyf_jxj_app.accepted   as accepted
+             , zyf_jxj_app.student_id as studentId
+             , zyf_jxj.id             as jxjId
+             , zyf_jxj.jxj_name       as jxjName
+             , zyf_jxj.sort_type      as sortType
+             , zyf_jxj.num_rate       as numRate
+             , temp_bj.zyId           as zyId
+             , temp_bj.njId           as njId
+        from zyf_jxj_app,
+             zyf_jxj,
+             temp_bj
+        where zyf_jxj_app.jxj_id = zyf_jxj.id
+          and zyf_jxj_app.student_id = temp_bj.studentId
+          and zyf_jxj_app.teacher_check = 1
+          and zyf_jxj_app.office_check = 1
     </select>
+
+    <update id="autoInitAccepted" parameterType="java.util.List">
+        UPDATE zyf.zyf_jxj_app t
+        SET t.accepted = 1
+        WHERE t.id in(
+        <foreach collection="appIdList" separator="," item="appId">
+            #{appId}
+        </foreach>
+        )
+    </update>
 </mapper>

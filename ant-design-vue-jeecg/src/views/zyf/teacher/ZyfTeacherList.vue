@@ -4,6 +4,31 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :md="6" :sm="12">
+            <a-form-item label="账号">
+              <!--<a-input placeholder="请输入账号查询" v-model="queryParam.username"></a-input>-->
+              <j-input placeholder="输入账号模糊查询" v-model="queryParam.username"></j-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="真实名字">
+              <a-input placeholder="请输入真实名字" v-model="queryParam.realname"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="辅导员学号">
+              <a-input placeholder="请输入辅导员学号" v-model="queryParam.student"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="性别">
+              <a-select v-model="queryParam.sex" placeholder="请选择性别">
+                <a-select-option value="">请选择</a-select-option>
+                <a-select-option value="1">男</a-select-option>
+                <a-select-option value="2">女</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="专业名称">
               <a-input placeholder="请输入专业名称" v-model="queryParam.zyName"></a-input>
@@ -27,57 +52,64 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-<!--      <a-button type="primary" icon="download" @click="handleExportXls('老师表')">导出</a-button>-->
-<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">-->
-<!--        <a-button type="primary" icon="import">导入</a-button>-->
-<!--      </a-upload>-->
+      <!--      <a-button type="primary" icon="download" @click="handleExportXls('老师表')">导出</a-button>-->
+      <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">-->
+      <!--        <a-button type="primary" icon="import">导入</a-button>-->
+      <!--      </a-upload>-->
       <!-- 高级查询区域 -->
-<!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>-->
+      <!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
+          <a-menu-item key="1" @click="batchDel">
+            <a-icon type="delete"/>
+            删除
+          </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
+        <a-button style="margin-left: 8px"> 批量操作
+          <a-icon type="down"/>
+        </a-button>
       </a-dropdown>
     </div>
 
     <!-- table区域-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
+          style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
       <a-table
-        ref="table"
-        size="middle"
-        :scroll="{x:true}"
-        bordered
-        rowKey="id"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        class="j-table-force-nowrap"
-        @change="handleTableChange">
+          ref="table"
+          size="middle"
+          :scroll="{x:true}"
+          bordered
+          rowKey="id"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="ipagination"
+          :loading="loading"
+          :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+          class="j-table-force-nowrap"
+          @change="handleTableChange">
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
         </template>
         <template slot="imgSlot" slot-scope="text">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+          <img v-else :src="getImgView(text)" height="25px" alt=""
+               style="max-width:80px;font-size: 12px;font-style: italic;"/>
         </template>
         <template slot="fileSlot" slot-scope="text">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
           <a-button
-            v-else
-            :ghost="true"
-            type="primary"
-            icon="download"
-            size="small"
-            @click="downloadFile(text)">
+              v-else
+              :ghost="true"
+              type="primary"
+              icon="download"
+              size="small"
+              @click="downloadFile(text)">
             下载
           </a-button>
         </template>
@@ -85,9 +117,9 @@
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical" />
+          <a-divider type="vertical"/>
           <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
@@ -110,111 +142,111 @@
 
 <script>
 
-  import '@/assets/less/TableExpand.less'
-  import { mixinDevice } from '@/utils/mixin'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import ZyfTeacherModal from './modules/ZyfTeacherModal'
+import '@/assets/less/TableExpand.less'
+import {mixinDevice} from '@/utils/mixin'
+import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+import ZyfTeacherModal from './modules/ZyfTeacherModal'
 
-  export default {
-    name: 'ZyfTeacherList',
-    mixins:[JeecgListMixin, mixinDevice],
-    components: {
-      ZyfTeacherModal
-    },
-    data () {
-      return {
-        description: '老师表管理页面',
-        // 表头
-        columns: [
-          // {
-          //   title: '#',
-          //   dataIndex: '',
-          //   key:'rowIndex',
-          //   width:40,
-          //   align:"center",
-          //   customRender:function (t,r,index) {
-          //     return parseInt(index)+1;
-          //   }
-          // },
-          {
-            title: '用户账号',
-            align: "center",
-            dataIndex: 'username',
-            // width: 60,
-            sorter: true
-          },
-          {
-            title: '用户姓名',
-            align: "center",
-            // width: 60,
-            dataIndex: 'realname',
-          },
-          {
-            title: '学号',
-            align: "center",
-            // width: 60,
-            dataIndex: 'workNo',
-          },
-          {
-            title:'专业',
-            align:"center",
-            dataIndex: 'zyName',
-            // width: 80,
-            sorter: true
-          },
-          {
-            title: '性别',
-            align: "center",
-            // width: 40,
-            dataIndex: 'sexStr',
-            sorter: true
-          },
-          {
-            title: '生日',
-            align: "center",
-            width: 60,
-            dataIndex: 'birthday'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align:"center",
-            fixed:"right",
-            width:147,
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        url: {
-          list: "/teacher/zyfTeacher/list",
-          delete: "/sys/user/delete",
-          deleteBatch: "/sys/user/deleteBatch",
-          exportXlsUrl: "/sys/user/exportXls",
-          importExcelUrl: "sys/user/importExcel",
+export default {
+  name: 'ZyfTeacherList',
+  mixins: [JeecgListMixin, mixinDevice],
+  components: {
+    ZyfTeacherModal
+  },
+  data() {
+    return {
+      description: '老师表管理页面',
+      // 表头
+      columns: [
+        // {
+        //   title: '#',
+        //   dataIndex: '',
+        //   key:'rowIndex',
+        //   width:40,
+        //   align:"center",
+        //   customRender:function (t,r,index) {
+        //     return parseInt(index)+1;
+        //   }
+        // },
+        {
+          title: '用户账号',
+          align: "center",
+          dataIndex: 'username',
+          // width: 60,
+          sorter: true
         },
-        dictOptions:{},
-        superFieldList:[],
-      }
-    },
-    created() {
+        {
+          title: '用户姓名',
+          align: "center",
+          // width: 60,
+          dataIndex: 'realname',
+        },
+        {
+          title: '学号',
+          align: "center",
+          // width: 60,
+          dataIndex: 'workNo',
+        },
+        {
+          title: '专业',
+          align: "center",
+          dataIndex: 'zyName',
+          // width: 80,
+          sorter: true
+        },
+        {
+          title: '性别',
+          align: "center",
+          // width: 40,
+          dataIndex: 'sexStr',
+          sorter: true
+        },
+        {
+          title: '生日',
+          align: "center",
+          width: 60,
+          dataIndex: 'birthday'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: "center",
+          fixed: "right",
+          width: 147,
+          scopedSlots: {customRender: 'action'}
+        }
+      ],
+      url: {
+        list: "/teacher/zyfTeacher/list",
+        delete: "/sys/user/delete",
+        deleteBatch: "/sys/user/deleteBatch",
+        exportXlsUrl: "/sys/user/exportXls",
+        importExcelUrl: "sys/user/importExcel",
+      },
+      dictOptions: {},
+      superFieldList: [],
+    }
+  },
+  created() {
     this.getSuperFieldList();
+  },
+  computed: {
+    importExcelUrl: function () {
+      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
     },
-    computed: {
-      importExcelUrl: function(){
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-      },
+  },
+  methods: {
+    initDictConfig() {
     },
-    methods: {
-      initDictConfig(){
-      },
-      getSuperFieldList(){
-        let fieldList=[];
-        fieldList.push({type:'string',value:'userId',text:'用户id',dictCode:''})
-        fieldList.push({type:'string',value:'zyId',text:'专业id',dictCode:''})
-        this.superFieldList = fieldList
-      }
+    getSuperFieldList() {
+      let fieldList = [];
+      fieldList.push({type: 'string', value: 'userId', text: '用户id', dictCode: ''})
+      fieldList.push({type: 'string', value: 'zyId', text: '专业id', dictCode: ''})
+      this.superFieldList = fieldList
     }
   }
+}
 </script>
 <style scoped>
-  @import '~@assets/less/common.less';
+@import '~@assets/less/common.less';
 </style>

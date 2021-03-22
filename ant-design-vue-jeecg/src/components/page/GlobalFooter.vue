@@ -11,7 +11,7 @@
     <div class="copyright">
       Copyright
       <a-icon type="copyright"/>
-      2021 <span>JEECG + SuCicada + zyf 出品</span>
+      2021 <span>ZYF 出品</span>
     </div>
   </div>
 </template>

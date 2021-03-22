@@ -21,5 +21,8 @@
         <if test="query.sex != null and query.sex != ''">
             and sex like #{query.sex}
         </if>
+        <if test="query.workNo != null and query.workNo != ''">
+            and work_no like #{query.workNo}
+        </if>
     </select>
 </mapper>

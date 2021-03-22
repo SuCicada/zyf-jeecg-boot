@@ -59,14 +59,16 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="autoInitAccepted" type="primary" icon="plus">自动确认初始人选</a-button>
-<!--      <a-button type="primary" icon="download" @click="handleExportXls('奖学金申请')">导出</a-button>-->
-<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
-<!--                @change="handleImportExcel">-->
-<!--        <a-button type="primary" icon="import">导入</a-button>-->
-<!--      </a-upload>-->
+      <a-button type="primary" icon="download" @click="handleExportXls('奖学金发放名单')">导出奖学金名单</a-button>
+
+      <!--      <a-button type="primary" icon="download" @click="handleExportXls('奖学金申请')">导出</a-button>-->
+      <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+      <!--                @change="handleImportExcel">-->
+      <!--        <a-button type="primary" icon="import">导入</a-button>-->
+      <!--      </a-upload>-->
       <!-- 高级查询区域 -->
-<!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal"-->
-<!--                     @handleSuperQuery="handleSuperQuery"></j-super-query>-->
+      <!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal"-->
+      <!--                     @handleSuperQuery="handleSuperQuery"></j-super-query>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -246,8 +248,8 @@ export default {
           , customRender: function (t, r, index) {
             console.log(t)
             return t === 0 ? "奖学金未发放"
-                : t === 1 ? "奖学金已获得"
-                    : t === 2 ? "奖学金未获得"
+                : t === 1 ? "奖学金已同意发放"
+                    : t === 2 ? "奖学金拒绝发放"
                         : t;
           }
         },
@@ -262,7 +264,7 @@ export default {
       ],
       role: "",
       url: {
-        list: "/jxj_app/zyfJxjApp/list",
+        list: "/jxj_app/zyfJxjApp/listAccepted",
         delete: "/jxj_app/zyfJxjApp/delete",
         deleteBatch: "/jxj_app/zyfJxjApp/deleteBatch",
         exportXlsUrl: "/jxj_app/zyfJxjApp/exportXls",
@@ -283,6 +285,7 @@ export default {
   },
   methods: {
     initDictConfig() {
+
       let that = this
       console.log("---------")
       let userId = store.getters.userInfo.id
@@ -296,7 +299,21 @@ export default {
           })
     },
     autoInitAccepted() {
-      getAction("/jxj_app/zyfJxjApp/autoInitAccepted", params);
+      const that = this;
+      that.confirmLoading = true;
+      getAction("/jxj_app/zyfJxjApp/autoInitAccepted").then(res => {
+        console.log(res)
+        if (res.success) {
+          that.$message.success(res.message);
+          that.$emit('ok');
+        } else {
+          that.$message.warning(res.message);
+        }
+        this.searchReset()
+      }).finally(() => {
+        that.confirmLoading = false;
+      })
+
     },
     getSuperFieldList() {
       let fieldList = [];

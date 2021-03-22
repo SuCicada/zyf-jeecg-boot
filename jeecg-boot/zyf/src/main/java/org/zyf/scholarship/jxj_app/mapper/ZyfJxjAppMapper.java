@@ -11,10 +11,16 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: 奖学金申请
  * @Author: jeecg-boot
- * @Date:   2021-03-03
+ * @Date: 2021-03-03
  * @Version: V1.0
  */
 public interface ZyfJxjAppMapper extends BaseMapper<ZyfJxjApp> {
     IPage<Map<String, Object>> queryPageList(IPage<Map<String, Object>> a, Map<String, String> query);
-    void autoInitAccepted(Map<String, String> query);
+
+    /**
+     * 得到待分发的学生信息
+     */
+    List<Map<String, Object>> queryAccepted(List<Map<String, Object>>a,Map<String, String> query);
+
+    void autoInitAccepted(@Param("appIdList") List<String> appIdList);
 }
