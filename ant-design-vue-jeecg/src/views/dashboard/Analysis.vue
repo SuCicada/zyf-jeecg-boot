@@ -10,10 +10,18 @@
         </p>
       </div>
       <div style="text-align: center" @click="changeImg">
-        <img id="img_home_0" v-show="home_show[0]" alt="" src="../../../public/home/home1.jpg" height="500"
-             width="auto"/>
-        <img id="img_home_1" v-show="home_show[1]" alt="" src="../../../public/home/home2.jpg" height="500"
-             width="auto"/>
+        <img id="img_home_0" v-show="home_show[0]" alt="" src="../../../public/home/home0.jpg"
+             height="500" width="auto"/>
+        <img id="img_home_1" v-show="home_show[1]" alt="" src="../../../public/home/home1.jpg"
+             height="500" width="auto"/>
+        <img id="img_home_2" v-show="home_show[2]" alt="" src="../../../public/home/home2.jpg"
+             height="500" width="auto"/>
+        <img id="img_home_3" v-show="home_show[3]" alt="" src="../../../public/home/home3.jpg"
+             height="500" width="auto"/>
+        <img id="img_home_4" v-show="home_show[4]" alt="" src="../../../public/home/home4.jpg"
+             height="500" width="auto"/>
+        <img id="img_home_5" v-show="home_show[5]" alt="" src="../../../public/home/home5.jpg"
+             height="500" width="auto"/>
       </div>
       <!--签字-->
     </section>
@@ -36,7 +44,7 @@ export default {
   },
   methods: {
     changeImg() {
-      this.home_show = [false, false]
+      this.home_show = Array(6).fill(false)
       // let items = ["img_home_1", "img_home_2"]
       let item = this.home_show_index;
       while (this.home_show_index === item) {

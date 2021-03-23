@@ -17,7 +17,8 @@ https://docs.qq.com/desktop/mydoc/folder/1FZE3_100009?_from=1
 - [[jeecg-boot]获得登录用户的信息](https://blog.csdn.net/gwcgwcjava/article/details/103396746)
 - https://www.jianshu.com/p/3aaf21dd34d6
 - [mybatis order by 排序](https://blog.csdn.net/xiaofanren1111/article/details/79470930)
-
+- https://www.html.cn/qa/css3/12709.html
+- https://www.jianshu.com/p/1f8a94ff06df
 
 记录:
 - 2-20 老师管理完成 开始学生管理
