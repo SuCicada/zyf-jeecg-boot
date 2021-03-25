@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zyf.scholarship.zxj_app.mapper.ZyfZxjAppMapper">
+    <select id="queryPageList" resultType="java.util.Map">
+        select zyf_zxj_app.id
+        , zyf_zxj_app.teacher_check as teacherCheck
+        , zyf_zxj_app.office_check as officeCheck
+        , zyf_zxj_app.accepted as accepted
+        , zyf_zxj.zxj_name as zxjName
+        <!-- 学生的信息   -->
+        , sys_user.realname as realname
+        , sys_user.realname as studentName
+        , zyf_bj.bj_name as bjName
+        , zyf_nj.nj_name as njName
+        , zyf_zy.zy_name as zyName
+        from zyf_zxj_app,
+        zyf_zxj,
+        sys_user,
+        zyf_bj,
+        zyf_zy,
+        zyf_nj
+        where zyf_zxj_app.zxj_id = zyf_zxj.id
+        and zyf_zxj_app.student_id = sys_user.id
+        and sys_user.org_code = zyf_bj.id
+        and zyf_nj.id = zyf_bj.nj_id
+        and zyf_zy.id = zyf_bj.zy_id
+        <!--   只有教务处的特有规则,
+            只有老师申请通过之后, 教务处才能看到申请
+        -->
+        <if test="query.role == 'OFFICE' ">
+            and zyf_zxj_app.teacher_check = 1
+        </if>
+        <!-- 老师的特有规则, 只能显示老师的专业的学生的申请   -->
+        <if test="query.zyId != null and query.zyId != ''">
+            and sys_user.org_code in (
+            select id from zyf_bj
+            where zyf_bj.zy_id = #{query.zyId}
+            )
+        </if>
+        <!-- 学生的特有规则, 只能显示学生自己的   -->
+        <if test="query.studentId != null and query.studentId != ''">
+            and sys_user.id = #{query.studentId}
+        </if>
+
+        <!-- 以下是查询条件判断  -->
+        <if test="query.workNo != null and query.workNo != ''">
+            and sys_user.work_no = #{query.workNo}
+        </if>
+        <if test="query.studentName != null and query.studentName != ''">
+            and sys_user.realname like #{query.studentName}
+        </if>
+        <if test="query.bjName != null and query.bjName != ''">
+            and zyf_bj.bj_name like #{query.bjName}
+        </if>
+        <if test="query.teacherCheck != null and query.teacherCheck != ''">
+            and zyf_zxj_app.teacher_check = #{query.teacherCheck}
+        </if>
+        <if test="query.officeCheck != null and query.officeCheck != ''">
+            and zyf_zxj_app.office_check = #{query.officeCheck}
+        </if>
+        <if test="query.njName != null and query.njName != ''">
+            and zyf_nj.nj_name = #{query.njName}
+        </if>
+        <if test="query.zyName != null and query.zyName != ''">
+            and zyf_zy.zy_name = #{query.zyName}
+        </if>
+    </select>
+
+    <!--#  这个能查到待发放的学生的id -->
+    <select id="queryAccepted" resultType="java.util.Map">
+        select zyf_zxj_app.id
+             , zyf_zxj_app.accepted   as accepted
+             , zyf_zxj_app.student_id as studentId
+             , zyf_zxj.id             as zxjId
+             , zyf_zxj.zxj_name       as zxjName
+             , zyf_zxj.sort_type      as sortType
+             , zyf_zxj.num_rate       as numRate
+             , temp_bj.zyId           as zyId
+             , temp_bj.njId           as njId
+        from zyf_zxj_app,
+             zyf_zxj,
+             temp_bj
+        where zyf_zxj_app.zxj_id = zyf_zxj.id
+          and zyf_zxj_app.student_id = temp_bj.studentId
+          and zyf_zxj_app.teacher_check = 1
+          and zyf_zxj_app.office_check = 1
+    </select>
+
+    <update id="autoInitAccepted" parameterType="java.util.List">
+        UPDATE zyf.zyf_zxj_app t
+        SET t.accepted = 1
+        WHERE t.id in(
+        <foreach collection="appIdList" separator="," item="appId">
+            #{appId}
+        </foreach>
+        )
+    </update>
+</mapper>
