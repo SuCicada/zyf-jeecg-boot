@@ -34,6 +34,12 @@
         <if test="query.bjName != null and query.ebjName != ''">
             and bj_name like #{query.bjName}
         </if>
+        <if test="query.bjId != null and query.bjId != ''">
+            and zyf_bj.id = #{query.bjId}
+        </if>
+        <if test="query.kcId != null and query.kcId != ''">
+            and zyf_kc.id like #{query.kcId}
+        </if>
         <if test="query.zyId != null and query.zyId != ''">
             and sys_user.org_code in (
             select id from zyf_bj

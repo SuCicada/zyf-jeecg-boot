@@ -4,24 +4,73 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="学生学号">
-              <a-input placeholder="学生学号" v-model="queryParam.workNo"></a-input>
+          <!--          <a-col :xl="6" :lg="7" :md="8" :sm="24">-->
+          <!--            <a-form-item label="学生学号">-->
+          <!--              <a-input placeholder="学生学号" v-model="queryParam.workNo"></a-input>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
+          <!--          <a-col :xl="6" :lg="7" :md="8" :sm="24">-->
+          <!--            <a-form-item label="学生姓名">-->
+          <!--              <a-input placeholder="学生姓名" v-model="queryParam.studentName"></a-input>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
+          <!--          <a-col :xl="6" :lg="7" :md="8" :sm="24">-->
+          <!--            <a-form-item label="课程名称">-->
+          <!--              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
+          <a-col :span="6">
+            <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择专业"
+                v-model="queryParam.zyId"
+                v-decorator="['zyName']"
+                optionFilterProp="children"
+                @change="changeZy">
+                <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">
+                  {{ zy.zyName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="学生姓名">
-              <a-input placeholder="学生姓名" v-model="queryParam.studentName"></a-input>
+          <a-col :span="6">
+            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择课程"
+                v-model="queryParam.kcId"
+                v-decorator="[ 'kcName',{}]"
+                optionFilterProp="children">
+                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">
+                  {{ kc.kcName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="课程名称">
-              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="班级名称">
-              <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>
+          <!--          <a-col :xl="6" :lg="7" :md="8" :sm="24">-->
+          <!--            <a-form-item label="班级名称">-->
+          <!--              <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
+          <a-col :span="6">
+            <a-form-item label="班级" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择班级"
+                v-model="queryParam.bjId"
+                v-decorator="[ 'bjName',{}]"
+                optionFilterProp="children">
+                <a-select-option v-for="(bj,index) in selectedBj " :key="index.toString()" :value="bj.id">
+                  {{ bj.bjName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
@@ -35,31 +84,52 @@
             </span>
           </a-col>
         </a-row>
+        <a-row>
+          <a-col :xl="22" :lg="7" :md="8" :sm="25">
+            <span style="font-weight: bold">
+              使用说明：
+              选择班级和课程，对学生原始成绩进行排名。
+            </span>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :xl="6" :lg="7" :md="8" :sm="50">
+            <span style="font-weight: bold">
+              <br>
+            </span>
+          </a-col>
+        </a-row>
       </a-form>
     </div>
     <!-- 查询区域-END -->
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <!--      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
       <a-button type="primary" icon="download" @click="handleExportXls('成绩表')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+      <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">-->
+      <!--        <a-button type="primary" icon="import">导入</a-button>-->
+      <!--      </a-upload>-->
       <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>
+      <!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
+          <a-menu-item key="1" @click="batchDel">
+            <a-icon type="delete"/>
+            删除
+          </a-menu-item>
         </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
+        <a-button style="margin-left: 8px"> 批量操作
+          <a-icon type="down"/>
+        </a-button>
       </a-dropdown>
     </div>
 
     <!-- table区域-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
+        style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
@@ -82,7 +152,8 @@
         </template>
         <template slot="imgSlot" slot-scope="text">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+          <img v-else :src="getImgView(text)" height="25px" alt=""
+               style="max-width:80px;font-size: 12px;font-style: italic;"/>
         </template>
         <template slot="fileSlot" slot-scope="text">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
@@ -100,9 +171,9 @@
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical" />
+          <a-divider type="vertical"/>
           <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
@@ -125,97 +196,140 @@
 
 <script>
 
-  import '@/assets/less/TableExpand.less'
-  import { mixinDevice } from '@/utils/mixin'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import ZyfScoreModal from './modules/ZyfScoreModal'
+import '@/assets/less/TableExpand.less'
+import {mixinDevice} from '@/utils/mixin'
+import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+import ZyfScoreModal from './modules/ZyfScoreModal'
+import {getAction} from "@api/manage";
 
-  export default {
-    name: 'ZyfScoreList',
-    mixins:[JeecgListMixin, mixinDevice],
-    components: {
-      ZyfScoreModal
-    },
-    data () {
-      return {
-        description: '成绩表管理页面',
-        // 表头
-        columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
-            }
-          },
-          {
-            title:'班级',
-            align:"center",
-            dataIndex: 'bjName'
-          },
-          {
-            title:'学生',
-            align:"center",
-            dataIndex: 'studentName'
-          },
-          {
-            title:'课程',
-            align:"center",
-            dataIndex: 'kcName'
-          },
-          {
-            title:'成绩值',
-            align:"center",
-            dataIndex: 'score'
-            ,sorter: true
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align:"center",
-            fixed:"right",
-            width:147,
-            scopedSlots: { customRender: 'action' }
+export default {
+  name: 'ZyfScoreList',
+  mixins: [JeecgListMixin, mixinDevice],
+  components: {
+    ZyfScoreModal
+  },
+  data() {
+    return {
+      description: '成绩表管理页面',
+      // 表头
+      columns: [
+        {
+          title: '排名',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: "center",
+          customRender: function (t, r, index) {
+            return parseInt(index) + 1;
           }
-        ],
-        url: {
-          list: "/score/zyfScore/list",
-          delete: "/score/zyfScore/delete",
-          deleteBatch: "/score/zyfScore/deleteBatch",
-          exportXlsUrl: "/score/zyfScore/exportXls",
-          importExcelUrl: "score/zyfScore/importExcel",
-
         },
-        dictOptions:{},
-        superFieldList:[],
-      }
-    },
-    created() {
+        {
+          title: '班级',
+          align: "center",
+          dataIndex: 'bjName'
+        },
+        {
+          title: '学生',
+          align: "center",
+          dataIndex: 'studentName'
+        },
+        {
+          title: '课程',
+          align: "center",
+          dataIndex: 'kcName'
+        },
+        {
+          title: '成绩值',
+          align: "center",
+          dataIndex: 'score'
+          , sorter: true
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: "center",
+          fixed: "right",
+          width: 147,
+          scopedSlots: {customRender: 'action'}
+        }
+      ], labelCol: {
+        xs: {span: 24},
+        sm: {span: 5},
+      },
+      wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 16},
+      },
+      selectedKc: [],
+      kcId: "",
+      selectedBj: [],
+      bjId: "",
+      selectedZy: [],
+      zyId: "",
+      disableMixinCreated: true,
+      url: {
+        list: "/score/zyfScore/list",
+        delete: "/score/zyfScore/delete",
+        deleteBatch: "/score/zyfScore/deleteBatch",
+        exportXlsUrl: "/score/zyfScore/exportXls",
+        importExcelUrl: "score/zyfScore/importExcel",
+
+      },
+      dictOptions: {},
+      superFieldList: [],
+    }
+  },
+  created() {
     this.getSuperFieldList();
+    this.initSelected()
+    // this.loading = true;
+    // this.ipagination.current = 1;
+    // this.dataSource = []
+    // this.ipagination.total = 0;
+    // this.loading = false;
+    console.log("------------")
+  },
+  computed: {
+    importExcelUrl: function () {
+      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
     },
-    computed: {
-      importExcelUrl: function(){
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-      },
+  },
+  methods: {
+    /**
+     * 初始化 选择器
+     */
+    initSelected() {
+      getAction("/nj/zyfNj/queryall")
+        .then(res => this.selectedNj = res.result)
+      getAction("/zy/zyfZy/queryall")
+        .then(res => this.selectedZy = res.result)
+      getAction("/bj/zyfBj/queryall")
+        .then(res => this.selectedBj = res.result)
+      getAction("/kc/zyfKc/queryall")
+        .then(res => this.selectedKc = res.result)
     },
-    methods: {
-      initDictConfig(){
-        // this.url.list += "?column=score&order=asc"
-        console.log(this.url.list)
-      },
-      getSuperFieldList(){
-        let fieldList=[];
-        fieldList.push({type:'string',value:'studentId',text:'学生id',dictCode:''})
-        fieldList.push({type:'string',value:'kcId',text:'课程id',dictCode:''})
-        fieldList.push({type:'string',value:'score',text:'成绩值',dictCode:''})
-        this.superFieldList = fieldList
-      }
+    changeZy() {
+      let obj = {zyId: this.queryParam.zyId}
+      getAction("/bj/zyfBj/queryall", obj)
+        .then(res => this.selectedBj = res.result)
+      getAction("/kc/zyfKc/queryall", obj)
+        .then(res => this.selectedKc = res.result)
+
+    },
+    initDictConfig() {
+      // this.url.list += "?column=score&order=asc"
+      console.log(this.url.list)
+    },
+    getSuperFieldList() {
+      let fieldList = [];
+      fieldList.push({type: 'string', value: 'studentId', text: '学生id', dictCode: ''})
+      fieldList.push({type: 'string', value: 'kcId', text: '课程id', dictCode: ''})
+      fieldList.push({type: 'string', value: 'score', text: '成绩值', dictCode: ''})
+      this.superFieldList = fieldList
     }
   }
+}
 </script>
 <style scoped>
-  @import '~@assets/less/common.less';
+@import '~@assets/less/common.less';
 </style>
