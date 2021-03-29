@@ -21,7 +21,7 @@
     props: {
       title: {
         type: String,
-        default: 'ZYF Pro',
+        default: '奖助学金管理系统',
         required: false
       },
       showTitle: {

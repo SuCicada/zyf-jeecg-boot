@@ -7,6 +7,9 @@
     "serve": "vue-cli-service serve",
     "build:test": "vue-cli-service build --mode test",
     "build": "vue-cli-service build",
+    "install": "cp -rf dist/* ../jeecg-boot/jeecg-boot-module-system/src/main/resources/static",
+    "test": "ls dist",
+    "deploy": "yarn build && yarn install",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

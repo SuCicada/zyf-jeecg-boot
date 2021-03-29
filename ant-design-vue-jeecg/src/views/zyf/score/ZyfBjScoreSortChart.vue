@@ -60,9 +60,9 @@
         <bar title="单专业年级班级成绩排名 柱状图" :dataSource="barData" :height="height"/>
       </a-tab-pane>
       <!-- 多列柱状图 -->
-      <a-tab-pane tab="多列柱状图" key="2">
-        <bar-multid title="单专业年级班级成绩排名 多列柱状图" :height="height"/>
-      </a-tab-pane>
+<!--      <a-tab-pane tab="多列柱状图" key="2">-->
+<!--        <bar-multid title="单专业年级班级成绩排名 多列柱状图" :height="height"/>-->
+<!--      </a-tab-pane>-->
       <!-- 迷你柱状图 -->
       <a-tab-pane tab="迷你柱状图" key="3">
         <mini-bar :dataSource="barData" :width="400" :height="200"/>

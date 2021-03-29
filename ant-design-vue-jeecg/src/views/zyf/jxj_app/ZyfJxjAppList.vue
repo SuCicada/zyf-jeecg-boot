@@ -124,8 +124,7 @@
             下载
           </a-button>
         </template>
-        <span slot="action" slot-scope="text, record"
-        >
+        <span slot="action" slot-scope="text, record">
           <a @click="handleDetail(record)">详情</a>
         </span>
 
@@ -156,10 +155,8 @@
           <!--            </a-menu>-->
           <!--          </a-dropdown>-->
         </span>
-
       </a-table>
     </div>
-
     <zyf-jxj-app-modal ref="modalForm" @ok="modalFormOk"></zyf-jxj-app-modal>
   </a-card>
 </template>

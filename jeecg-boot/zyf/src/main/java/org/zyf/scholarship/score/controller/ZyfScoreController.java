@@ -88,6 +88,8 @@ public class ZyfScoreController extends JeecgController<ZyfScore, IZyfScoreServi
 		Util.Role role = utilService.who(loginUser.getId());
 		if (role == Util.Role.TEACHER) {
 			map.put("zyId", loginUser.getOrgCode());
+		}else if(role == Util.Role.STUDENT){
+			map.put("bjId", loginUser.getOrgCode());
 		}
 		pageList = zyfZcScoreMapper.queryPageList(pageList, map);
 

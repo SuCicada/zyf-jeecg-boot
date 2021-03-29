@@ -19,7 +19,7 @@
           <!--              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>-->
           <!--            </a-form-item>-->
           <!--          </a-col>-->
-          <a-col :span="6">
+          <a-col :span="6" v-show=" role !== 'STUDENT'">
             <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
@@ -57,7 +57,7 @@
           <!--              <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>-->
           <!--            </a-form-item>-->
           <!--          </a-col>-->
-          <a-col :span="6">
+          <a-col :span="6" v-show=" role !== 'STUDENT'">
             <a-form-item label="班级" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
@@ -86,9 +86,13 @@
         </a-row>
         <a-row>
           <a-col :xl="22" :lg="7" :md="8" :sm="25">
-            <span style="font-weight: bold">
+            <span style="font-weight: bold" v-show=" role !== 'STUDENT'">
               使用说明：
               选择班级和课程，对学生原始成绩进行排名。
+            </span>
+            <span style="font-weight: bold" v-show=" role === 'STUDENT'">
+              使用说明：
+              选择课程，对原始成绩进行排名。
             </span>
           </a-col>
         </a-row>
@@ -201,6 +205,7 @@ import {mixinDevice} from '@/utils/mixin'
 import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import ZyfScoreModal from './modules/ZyfScoreModal'
 import {getAction} from "@api/manage";
+import store from '@/store'
 
 export default {
   name: 'ZyfScoreList',
@@ -267,6 +272,7 @@ export default {
       selectedZy: [],
       zyId: "",
       disableMixinCreated: true,
+      role: "",
       url: {
         list: "/score/zyfScore/list",
         delete: "/score/zyfScore/delete",
@@ -287,6 +293,16 @@ export default {
     // this.dataSource = []
     // this.ipagination.total = 0;
     // this.loading = false;
+    let that = this
+    let userId = store.getters.userInfo.id
+    let obj = {userId: userId}
+    getAction("/zyf/util/queryUserRole", obj)
+      .then(res => {
+        let role = res.result
+        console.log("role " + role)
+        that.role = role
+        this.role = role
+      })
     console.log("------------")
   },
   computed: {
@@ -314,7 +330,6 @@ export default {
         .then(res => this.selectedBj = res.result)
       getAction("/kc/zyfKc/queryall", obj)
         .then(res => this.selectedKc = res.result)
-
     },
     initDictConfig() {
       // this.url.list += "?column=score&order=asc"
