@@ -19,7 +19,7 @@
           <!--              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>-->
           <!--            </a-form-item>-->
           <!--          </a-col>-->
-          <a-col :span="6" v-show=" role !== 'STUDENT'">
+          <a-col :span="6" v-show=" role === 'OFFICE'">
             <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
@@ -29,51 +29,68 @@
                 v-model="queryParam.zyId"
                 v-decorator="['zyName']"
                 optionFilterProp="children"
-                @change="changeZy">
+              >
                 <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">
                   {{ zy.zyName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
-            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <!--              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>-->
+          <a-col :span="6" v-show=" role !== 'STUDENT'">
+            <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['njId']" :trigger-change="true" dictCode="" placeholder="请选择年级id" />-->
               <a-select
                 mode="default"
                 style="width: 100%"
-                placeholder="请选择课程"
-                v-model="queryParam.kcId"
-                v-decorator="[ 'kcName',{}]"
-                optionFilterProp="children">
-                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">
-                  {{ kc.kcName }}
+                placeholder="请选择年级"
+                v-model="queryParam.njId"
+                optionFilterProp="children"
+                v-decorator="['njName']"
+              >
+                <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
+                  {{ nj.njName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
+          <!--          <a-col :span="6">-->
+          <!--            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+          <!--              &lt;!&ndash;              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>&ndash;&gt;-->
+          <!--              <a-select-->
+          <!--                mode="default"-->
+          <!--                style="width: 100%"-->
+          <!--                placeholder="请选择课程"-->
+          <!--                v-model="queryParam.kcId"-->
+          <!--                v-decorator="[ 'kcName',{}]"-->
+          <!--                optionFilterProp="children">-->
+          <!--                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">-->
+          <!--                  {{ kc.kcName }}-->
+          <!--                </a-select-option>-->
+          <!--              </a-select>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
           <!--          <a-col :xl="6" :lg="7" :md="8" :sm="24">-->
           <!--            <a-form-item label="班级名称">-->
           <!--              <a-input placeholder="班级名称" v-model="queryParam.bjName"></a-input>-->
           <!--            </a-form-item>-->
           <!--          </a-col>-->
-          <a-col :span="6" v-show=" role !== 'STUDENT' && !isZyPage">
-            <a-form-item label="班级" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
-              <a-select
-                mode="default"
-                style="width: 100%"
-                placeholder="请选择班级"
-                v-model="queryParam.bjId"
-                v-decorator="[ 'bjName',{}]"
-                optionFilterProp="children">
-                <a-select-option v-for="(bj,index) in selectedBj " :key="index.toString()" :value="bj.id">
-                  {{ bj.bjName }}
-                </a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+          <!--          <a-col :span="6" v-show=" role !== 'STUDENT' && !isZyPage">-->
+          <!--            <a-form-item label="班级" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+          <!--              &lt;!&ndash;              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />&ndash;&gt;-->
+          <!--              <a-select-->
+          <!--                mode="default"-->
+          <!--                style="width: 100%"-->
+          <!--                placeholder="请选择班级"-->
+          <!--                v-model="queryParam.bjId"-->
+          <!--                v-decorator="[ 'bjName',{}]"-->
+          <!--                optionFilterProp="children">-->
+          <!--                <a-select-option v-for="(bj,index) in selectedBj " :key="index.toString()" :value="bj.id">-->
+          <!--                  {{ bj.bjName }}-->
+          <!--                </a-select-option>-->
+          <!--              </a-select>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
+          <a-col :xl="6" :lg="7" :md="8" :sm="24" v-show=" role !== 'STUDENT'">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
@@ -88,11 +105,11 @@
           <a-col :xl="22" :lg="7" :md="8" :sm="25">
             <span style="font-weight: bold" v-show=" role !== 'STUDENT'">
               使用说明：
-              选择专业和课程，对学生原始成绩进行排名。
+              选择专业和年级，对学生综测成绩进行排名。
             </span>
             <span style="font-weight: bold" v-show=" role === 'STUDENT'">
               使用说明：
-              选择课程，对原始成绩进行排名。
+              本页面为当前学生所在的专业-年级的综测排名
             </span>
           </a-col>
         </a-row>
@@ -218,15 +235,22 @@ export default {
       description: '成绩表管理页面',
       // 表头
       columns: [
+        // {
+        //   title: '排名',
+        //   dataIndex: '',
+        //   key: 'rowIndex',
+        //   width: 60,
+        //   align: "center",
+        //   customRender: function (t, r, index) {
+        //     console.log(t)
+        //     console.log(r)
+        //     return parseInt(index) + 1;
+        //   }
+        // },
         {
           title: '排名',
-          dataIndex: '',
-          key: 'rowIndex',
-          width: 60,
           align: "center",
-          customRender: function (t, r, index) {
-            return parseInt(index) + 1;
-          }
+          dataIndex: 'sortorder'
         },
         {
           title: '班级',
@@ -239,14 +263,19 @@ export default {
           dataIndex: 'studentName'
         },
         {
-          title: '课程',
+          title: '学号',
           align: "center",
-          dataIndex: 'kcName'
+          dataIndex: 'studentWorkNo'
         },
+        // {
+        //   title: '课程',
+        //   align: "center",
+        //   dataIndex: 'kcName'
+        // },
         {
           title: '成绩值',
           align: "center",
-          dataIndex: 'score'
+          dataIndex: 'realScore'
           , sorter: true
         },
         // {
@@ -271,10 +300,11 @@ export default {
       bjId: "",
       selectedZy: [],
       zyId: "",
+      selectedNj: [],
       disableMixinCreated: true,
       role: "",
       url: {
-        list: "/score/zyfScore/list",
+        list: "/score/zyfScore/queryZcScorePageList",
         delete: "/score/zyfScore/delete",
         deleteBatch: "/score/zyfScore/deleteBatch",
         exportXlsUrl: "/score/zyfScore/exportXls",
@@ -288,7 +318,7 @@ export default {
   },
   created() {
     console.log(location.search)
-    this.isZyPage = location.search === "?zy"
+    // this.isZyPage = location.search === "?zy"
     this.getSuperFieldList();
     this.initSelected()
     // this.loading = true;
@@ -305,6 +335,9 @@ export default {
         console.log("role " + role)
         that.role = role
         this.role = role
+        if(role === "STUDENT"){
+          this.searchQuery()
+        }
       })
     console.log("------------")
   },
@@ -322,18 +355,18 @@ export default {
         .then(res => this.selectedNj = res.result)
       getAction("/zy/zyfZy/queryall")
         .then(res => this.selectedZy = res.result)
-      getAction("/bj/zyfBj/queryall")
-        .then(res => this.selectedBj = res.result)
-      getAction("/kc/zyfKc/queryall")
-        .then(res => this.selectedKc = res.result)
+      // getAction("/bj/zyfBj/queryall")
+      //   .then(res => this.selectedBj = res.result)
+      // getAction("/kc/zyfKc/queryall")
+      //   .then(res => this.selectedKc = res.result)
     },
-    changeZy() {
-      let obj = {zyId: this.queryParam.zyId}
-      getAction("/bj/zyfBj/queryall", obj)
-        .then(res => this.selectedBj = res.result)
-      getAction("/kc/zyfKc/queryall", obj)
-        .then(res => this.selectedKc = res.result)
-    },
+    // () {
+    //   let obj = {zyId: this.queryParam.zyId}
+    //   getAction("/bj/zyfBj/queryall", obj)
+    //     .then(res => this.selectedBj = res.result)
+    //   getAction("/kc/zyfKc/queryall", obj)
+    //     .then(res => this.selectedKc = res.result)
+    // },
     initDictConfig() {
       // this.url.list += "?column=score&order=asc"
       console.log(this.url.list)

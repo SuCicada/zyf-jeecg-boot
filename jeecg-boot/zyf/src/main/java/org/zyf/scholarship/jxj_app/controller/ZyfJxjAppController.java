@@ -178,15 +178,16 @@ public class ZyfJxjAppController extends JeecgController<ZyfJxjApp, IZyfJxjAppSe
     public double getStudentRealScore(String studentId) {
         Map<String, String> query = new HashMap<>();
         query.put("studentId", studentId);
-//        List<Map<String, Object>> zcScoreList = zyfScoreService.queryZcScoreList(query);
-        List<Map<String, Object>> zcScoreList = new ArrayList<>();
-        zcScoreList = zyfScoreMapper.queryZcScoreList(zcScoreList, query);
+        List<Map<String, Object>> zcScoreList = zyfScoreService.queryZcScoreList(query);
+//        List<Map<String, Object>> zcScoreList = new ArrayList<>();
+//        zcScoreList = zyfScoreMapper.queryZcScoreList(zcScoreList, query);
         return (Double) (zcScoreList.get(0).get("realScore"));
     }
 
     public int getGroupSum(Map query) {
-        List<Map<String, Object>> zcScoreList = new ArrayList<>();
-        zcScoreList = zyfScoreMapper.queryZcScoreList(zcScoreList, query);
+//        List<Map<String, Object>> zcScoreList = new ArrayList<>();
+//        zcScoreList = zyfScoreMapper.queryZcScoreList(zcScoreList, query);
+        List<Map<String, Object>> zcScoreList = zyfScoreService.queryZcScoreList(query);
         return zcScoreList.size();
     }
 

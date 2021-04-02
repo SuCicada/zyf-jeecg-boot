@@ -35,16 +35,16 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="10">
-            <a-form-item label="成绩模式" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <!--              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />-->
-              <a-select v-decorator="[ 'scoreType', {}]" placeholder="请选择成绩模式"
-                        :getPopupContainer="(target) => target.parentNode">
-                <a-select-option :value="1">原始成绩</a-select-option>
-                <a-select-option :value="2">综测成绩</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
+<!--          <a-col :span="10">-->
+<!--            <a-form-item label="成绩模式" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+<!--              &lt;!&ndash;              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />&ndash;&gt;-->
+<!--              <a-select v-decorator="[ 'scoreType', {}]" placeholder="请选择成绩模式"-->
+<!--                        :getPopupContainer="(target) => target.parentNode">-->
+<!--                <a-select-option :value="1">原始成绩</a-select-option>-->
+<!--                <a-select-option :value="2">综测成绩</a-select-option>-->
+<!--              </a-select>-->
+<!--            </a-form-item>-->
+<!--          </a-col>-->
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="submitForm" icon="search">查询</a-button>

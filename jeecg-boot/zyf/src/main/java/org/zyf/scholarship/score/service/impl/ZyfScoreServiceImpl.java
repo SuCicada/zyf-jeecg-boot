@@ -26,7 +26,8 @@ public class ZyfScoreServiceImpl extends ServiceImpl<ZyfScoreMapper, ZyfScore> i
     @Override
     public List<Map<String, Object>> queryZcScoreList(Map<String, String> query) {
         List<Map<String, Object>> zcScoreList = new ArrayList<>();
-//        zcScoreList = zyfZcScoreMapper.queryZcScoreList( query);
+        zyfZcScoreMapper.initView();
+        zcScoreList = zyfZcScoreMapper.queryZcScoreList(zcScoreList, query);
 //        zcScoreList.forEach(row -> {
 //            double zcScore = Double.parseDouble(row.get("zcScore"));
 //            if (zcScore < 21) {
