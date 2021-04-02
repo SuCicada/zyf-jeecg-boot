@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zyf.scholarship.utils.mapper.UtilMapper">
-<!--    <select id="getRoleId" resultType="java.util.Map">-->
-<!--    </select>-->
+    <!--    <select id="getRoleId" resultType="java.util.Map">-->
+    <!--    </select>-->
+    <select id="queryUserInfo" resultType="java.util.Map">
+        select sys_user.realname as realname,
+        sys_user.work_no as workNo,
+        sys_user.username as username
+        <if test="role ==  'TEACHER' || role ==  'STUDENT'">
+            ,birthday
+            ,sex
+            ,xy_name as xyName
+            ,zy_name as zyName
+            <if test="role ==  'STUDENT'">
+                , bj_name as bjName
+                , nj_name as njName
+            </if>
+        </if>
+        from sys_user
+        <if test="role ==  'TEACHER' || role ==  'STUDENT'">
+            , zyf_zy
+            , zyf_xy
+            <if test="role ==  'STUDENT'">
+                , zyf_bj
+                , zyf_nj
+            </if>
+        </if>
+        where true
+        and sys_user.id = #{userId}
+        <if test="role ==  'TEACHER'">
+            and sys_user.org_code = zyf_zy.id
+            and zyf_xy.id = zyf_zy.xy_id
+        </if>
+        <if test="role ==  'STUDENT'">
+            and sys_user.org_code = zyf_bj.id
+            and zyf_nj.id = zyf_bj.nj_id
+            and zyf_zy.id = zyf_bj.zy_id
+            and zyf_xy.id = zyf_zy.xy_id
+        </if>
+    </select>
 </mapper>

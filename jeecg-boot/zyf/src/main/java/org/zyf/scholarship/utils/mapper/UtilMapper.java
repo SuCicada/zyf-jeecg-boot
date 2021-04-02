@@ -22,4 +22,6 @@ public interface UtilMapper extends BaseMapper<Map> {
         "    where sys_user_role.user_id=#{userId} \n" +
         "    limit 1 ")
     String getRoleId(String userId);
+
+    Map<String, String> queryUserInfo(Map<String, String> a, String role, String userId);
 }

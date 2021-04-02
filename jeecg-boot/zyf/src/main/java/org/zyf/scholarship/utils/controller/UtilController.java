@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.zyf.scholarship.utils.Util;
+import org.zyf.scholarship.utils.mapper.UtilMapper;
 import org.zyf.scholarship.utils.service.UtilService;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,8 @@ import java.util.Map;
 public class UtilController {
     @Autowired
     private UtilService utilService;
+    @Resource
+    private UtilMapper utilMapper;
 
     @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
     public Result<String> queryUserRole(@RequestParam(name = "userId", required = false)
@@ -34,6 +39,22 @@ public class UtilController {
         Util.Role role = utilService.who(userId);
         System.out.println(role.name());
         result.setResult(role.name());
+        return result;
+    }
+
+    @RequestMapping(value = "/queryUserInfo", method = RequestMethod.GET)
+    public Result queryUserInfo(@RequestParam(name = "userId", required = false)
+                                    String userId) {
+        Result<Map<String, String>> result = new Result<>();
+        if (StringUtils.isBlank(userId)) {
+            userId = Util.getLoginUser().getId();
+        }
+        Util.Role role = utilService.who(userId);
+        System.out.println(role.name());
+        Map<String, String> map = new HashMap<>();
+        map = utilMapper.queryUserInfo(map, role.name(), userId);
+        map.put("role", role.name());
+        result.setResult(map);
         return result;
     }
 }
