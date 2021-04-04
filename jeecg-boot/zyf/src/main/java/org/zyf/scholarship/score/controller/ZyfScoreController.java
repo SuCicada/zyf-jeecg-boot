@@ -77,6 +77,7 @@ public class ZyfScoreController extends JeecgController<ZyfScore, IZyfScoreServi
             map.put("zyId", loginUser.getOrgCode());
         } else if (role == Util.Role.STUDENT) {
             map.put("bjId", loginUser.getOrgCode());
+            map.put("studentId", loginUser.getId());
         }
         pageList = zyfZcScoreMapper.queryPageList(pageList, map);
 

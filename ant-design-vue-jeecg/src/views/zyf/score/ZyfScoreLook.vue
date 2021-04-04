@@ -19,7 +19,24 @@
           <!--              <a-input placeholder="课程名称" v-model="queryParam.kcName"></a-input>-->
           <!--            </a-form-item>-->
           <!--          </a-col>-->
-          <a-col :span="6" v-show=" role !== 'STUDENT'">
+          <a-col :span="6" v-show=" role === 'OFFICE'">
+            <a-form-item label="学院" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择学院"
+                v-model="queryParam.xyId"
+                v-decorator="['xyName']"
+                optionFilterProp="children"
+                @change="changeXy">
+                <a-select-option v-for="(xy,index) in selectedXy " :key="index.toString()" :value="xy.id">
+                  {{ xy.xyName }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6" v-show=" role === 'OFFICE'">
             <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
@@ -36,18 +53,19 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
-            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <!--              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>-->
+          <a-col :span="6" v-show=" role !== 'STUDENT'">
+            <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
                 mode="default"
                 style="width: 100%"
-                placeholder="请选择课程"
-                v-model="queryParam.kcId"
-                v-decorator="[ 'kcName',{}]"
-                optionFilterProp="children">
-                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">
-                  {{ kc.kcName }}
+                placeholder="请选择年级"
+                v-model="queryParam.njId"
+                v-decorator="['njName']"
+                optionFilterProp="children"
+                @change="changeNj">
+                <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
+                  {{ nj.njName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -69,6 +87,22 @@
                 optionFilterProp="children">
                 <a-select-option v-for="(bj,index) in selectedBj " :key="index.toString()" :value="bj.id">
                   {{ bj.bjName }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="课程" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <a-input v-decorator="['kcId']" placeholder="请输入课程id"  ></a-input>-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择课程"
+                v-model="queryParam.kcId"
+                v-decorator="[ 'kcName',{}]"
+                optionFilterProp="children">
+                <a-select-option v-for="(kc,index) in selectedKc " :key="index.toString()" :value="kc.id">
+                  {{ kc.kcName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -271,6 +305,10 @@ export default {
       bjId: "",
       selectedZy: [],
       zyId: "",
+      selectedXy: [],
+      xyId: "",
+      selectedNj: [],
+      njId: "",
       disableMixinCreated: true,
       role: "",
       url: {
@@ -318,21 +356,34 @@ export default {
      * 初始化 选择器
      */
     initSelected() {
-      getAction("/nj/zyfNj/queryall")
-        .then(res => this.selectedNj = res.result)
+      getAction("/xy/zyfXy/queryall")
+        .then(res => this.selectedXy = res.result)
       getAction("/zy/zyfZy/queryall")
         .then(res => this.selectedZy = res.result)
+      getAction("/nj/zyfNj/queryall")
+        .then(res => this.selectedNj = res.result)
       getAction("/bj/zyfBj/queryall")
         .then(res => this.selectedBj = res.result)
       getAction("/kc/zyfKc/queryall")
         .then(res => this.selectedKc = res.result)
     },
+    changeXy() {
+      let obj = {xyId: this.queryParam.xyId}
+      getAction("/zy/zyfZy/queryall", obj)
+        .then(res => this.selectedZy = res.result)
+    },
     changeZy() {
-      let obj = {zyId: this.queryParam.zyId}
+      let obj = {
+        zyId: this.queryParam.zyId
+        , njId: this.queryParam.njId
+      }
       getAction("/bj/zyfBj/queryall", obj)
         .then(res => this.selectedBj = res.result)
       getAction("/kc/zyfKc/queryall", obj)
         .then(res => this.selectedKc = res.result)
+    },
+    changeNj() {
+      this.changeZy()
     },
     initDictConfig() {
       // this.url.list += "?column=score&order=asc"

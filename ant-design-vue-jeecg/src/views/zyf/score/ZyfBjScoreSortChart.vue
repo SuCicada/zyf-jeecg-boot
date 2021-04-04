@@ -3,48 +3,66 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row>
-          <a-col :span="10">
-            <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <!--              <j-dict-select-tag type="list" v-decorator="['njId']" :trigger-change="true" dictCode="" placeholder="请选择年级id" />-->
+          <a-col :span="6" v-show=" role === 'OFFICE'">
+            <a-form-item label="学院" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
-                  mode="default"
-                  style="width: 100%"
-                  placeholder="请选择年级"
-                  v-model="njId"
-                  optionFilterProp="children"
-                  v-decorator="['njName']">
-                <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
-                  {{ nj.njName }}
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择学院"
+                v-model="queryParam.xyId"
+                v-decorator="['xyName']"
+                optionFilterProp="children"
+                @change="changeXy">
+                <a-select-option v-for="(xy,index) in selectedXy " :key="index.toString()" :value="xy.id">
+                  {{ xy.xyName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="10">
+          <a-col :span="6" v-show="role === 'OFFICE'">
             <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
-                  mode="default"
-                  style="width: 100%"
-                  placeholder="请选择专业"
-                  v-model="zyId"
-                  v-decorator="['zyName']"
-                  optionFilterProp="children">
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择专业"
+                v-model="zyId"
+                v-decorator="['zyName']"
+                optionFilterProp="children">
                 <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">
                   {{ zy.zyName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-<!--          <a-col :span="10">-->
-<!--            <a-form-item label="成绩模式" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
-<!--              &lt;!&ndash;              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />&ndash;&gt;-->
-<!--              <a-select v-decorator="[ 'scoreType', {}]" placeholder="请选择成绩模式"-->
-<!--                        :getPopupContainer="(target) => target.parentNode">-->
-<!--                <a-select-option :value="1">原始成绩</a-select-option>-->
-<!--                <a-select-option :value="2">综测成绩</a-select-option>-->
-<!--              </a-select>-->
-<!--            </a-form-item>-->
-<!--          </a-col>-->
+
+          <a-col :span="6">
+            <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['njId']" :trigger-change="true" dictCode="" placeholder="请选择年级id" />-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择年级"
+                v-model="njId"
+                optionFilterProp="children"
+                v-decorator="['njName']">
+                <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
+                  {{ nj.njName }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <!--          <a-col :span="10">-->
+          <!--            <a-form-item label="成绩模式" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+          <!--              &lt;!&ndash;              <j-dict-select-tag type="radio" v-decorator="['sortType']" :trigger-change="true" dictCode="" placeholder="请选择排名方式" />&ndash;&gt;-->
+          <!--              <a-select v-decorator="[ 'scoreType', {}]" placeholder="请选择成绩模式"-->
+          <!--                        :getPopupContainer="(target) => target.parentNode">-->
+          <!--                <a-select-option :value="1">原始成绩</a-select-option>-->
+          <!--                <a-select-option :value="2">综测成绩</a-select-option>-->
+          <!--              </a-select>-->
+          <!--            </a-form-item>-->
+          <!--          </a-col>-->
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="submitForm" icon="search">查询</a-button>
@@ -60,9 +78,9 @@
         <bar title="单专业年级班级成绩排名 柱状图" :dataSource="barData" :height="height"/>
       </a-tab-pane>
       <!-- 多列柱状图 -->
-<!--      <a-tab-pane tab="多列柱状图" key="2">-->
-<!--        <bar-multid title="单专业年级班级成绩排名 多列柱状图" :height="height"/>-->
-<!--      </a-tab-pane>-->
+      <!--      <a-tab-pane tab="多列柱状图" key="2">-->
+      <!--        <bar-multid title="单专业年级班级成绩排名 多列柱状图" :height="height"/>-->
+      <!--      </a-tab-pane>-->
       <!-- 迷你柱状图 -->
       <a-tab-pane tab="迷你柱状图" key="3">
         <mini-bar :dataSource="barData" :width="400" :height="200"/>
@@ -146,6 +164,7 @@ import {mixinDevice} from '@/utils/mixin'
 import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import ZyfScoreModal from './modules/ZyfScoreModal'
 import {getAction} from "@api/manage";
+import store from '@/store'
 
 export default {
   name: 'ViserChartDemo',
@@ -173,6 +192,9 @@ export default {
       njId: "",
       selectedZy: [],
       zyId: "",
+      selectedXy: [],
+      xyId: "",
+      role: "",
     }
   },
   created() {
@@ -182,20 +204,53 @@ export default {
     //   this.loadRankListData()
     // }, 100)
     this.initSelected()
+    this.getRole()
   },
   methods: {
     /**
      * 初始化 选择器
      */
     initSelected() {
+      getAction("/xy/zyfXy/queryall")
+        .then(res => this.selectedXy = res.result)
       getAction("/nj/zyfNj/queryall")
-          .then(res => {
-            this.selectedNj = res.result
-          })
+        .then(res => {
+          this.selectedNj = res.result
+        })
       getAction("/zy/zyfZy/queryall")
-          .then(res => {
-            this.selectedZy = res.result
-          })
+        .then(res => {
+          this.selectedZy = res.result
+        })
+    },
+    getRole() {
+      let userId = store.getters.userInfo.id
+      let obj = {userId: userId}
+      let that = this
+      getAction("/zyf/util/queryUserRole", obj)
+        .then(res => {
+          let role = res.result
+          console.log("role " + role)
+          that.role = role
+          this.role = role
+        })
+    },
+    changeXy() {
+      let obj = {xyId: this.queryParam.xyId}
+      getAction("/zy/zyfZy/queryall", obj)
+        .then(res => this.selectedZy = res.result)
+    },
+    changeZy() {
+      let obj = {
+        zyId: this.queryParam.zyId
+        , njId: this.queryParam.njId
+      }
+      getAction("/bj/zyfBj/queryall", obj)
+        .then(res => this.selectedBj = res.result)
+      getAction("/kc/zyfKc/queryall", obj)
+        .then(res => this.selectedKc = res.result)
+    },
+    changeNj() {
+      this.changeZy()
     },
     loadData(x, y, max, min, before = '', after = '月') {
       let data = []
@@ -224,23 +279,23 @@ export default {
         njId: this.njId
       }
       getAction("/score/zyfScore/queryBjScoreSortChart", param)
-          .then(res => {
-            // this.selectedZy = res.result
-            console.log(res['result'])
-            if (res['result']) {
-              this.rankList =
-                  res['result'].map(a => {
-                    return {'name': a['bjName'], 'total': a['score']}
-                  })
-              this.areaData = this.barData =
-                  res['result'].map(a => {
-                    return {'x': a['bjName'], 'y': a['score']}
-                  })
-            } else {
-              this.rankList = this.areaData = this.barData = []
-            }
-            // console.log(this.loadData('x', 'y', 1000, 200))
-          })
+        .then(res => {
+          // this.selectedZy = res.result
+          console.log(res['result'])
+          if (res['result']) {
+            this.rankList =
+              res['result'].map(a => {
+                return {'name': a['bjName'], 'total': a['score']}
+              })
+            this.areaData = this.barData =
+              res['result'].map(a => {
+                return {'x': a['bjName'], 'y': a['score']}
+              })
+          } else {
+            this.rankList = this.areaData = this.barData = []
+          }
+          // console.log(this.loadData('x', 'y', 1000, 200))
+        })
     }
   }
 }

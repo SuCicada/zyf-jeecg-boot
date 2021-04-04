@@ -12,15 +12,21 @@
         ,zyf_kc.id as kcId
         ,zyf_kc.kc_name as kcName
         ,zyf_bj.bj_name as bjName
+        ,zyf_nj.nj_name as njName
         <!--    排序用 -->
         ,zyf_score.create_time as createTime
         from zyf_score,
         sys_user,
         zyf_kc,
-        zyf_bj
+        zyf_bj,
+        zyf_nj
         where zyf_score.kc_id = zyf_kc.id
         and zyf_score.student_id = sys_user.id
         and zyf_bj.id = sys_user.org_code
+        and zyf_nj.id =zyf_bj.nj_id
+        <if test="query.studentId != null and query.studentId != ''">
+            and sys_user.id = #{query.studentId}
+        </if>
         <if test="query.workNo != null and query.workNo != ''">
             and sys_user.work_no = #{query.workNo}
         </if>
@@ -45,6 +51,9 @@
             where zyf_bj.zy_id = #{query.zyId}
             )
         </if>
+        <if test="query.njId != null and query.njId != ''">
+            and zyf_nj.id = #{query.njId}
+        </if>
 
         <!--    排序 -->
         <if test="query.column != null and query.column != '' and
@@ -52,6 +61,7 @@
             order by ${query.column} ${query.order}
         </if>
     </select>
+
     <update id="initView">
         set @@sql_mode =
         'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
@@ -258,5 +268,4 @@
         ) as trs
         ) as t
     </select>
-
 </mapper>

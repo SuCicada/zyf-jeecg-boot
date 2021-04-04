@@ -20,6 +20,24 @@
           <!--            </a-form-item>-->
           <!--          </a-col>-->
           <a-col :span="6" v-show=" role === 'OFFICE'">
+            <a-form-item label="学院" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
+              <a-select
+                mode="default"
+                style="width: 100%"
+                placeholder="请选择学院"
+                v-model="queryParam.xyId"
+                v-decorator="['xyName']"
+                optionFilterProp="children"
+                @change="changeXy">
+                <a-select-option v-for="(xy,index) in selectedXy " :key="index.toString()" :value="xy.id">
+                  {{ xy.xyName }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="6" v-show=" role === 'OFFICE'">
             <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
               <a-select
@@ -29,7 +47,7 @@
                 v-model="queryParam.zyId"
                 v-decorator="['zyName']"
                 optionFilterProp="children"
-              >
+                @change="changeZy">
                 <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">
                   {{ zy.zyName }}
                 </a-select-option>
@@ -46,7 +64,7 @@
                 v-model="queryParam.njId"
                 optionFilterProp="children"
                 v-decorator="['njName']"
-              >
+                @change="changeNj">
                 <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
                   {{ nj.njName }}
                 </a-select-option>
@@ -300,6 +318,8 @@ export default {
       bjId: "",
       selectedZy: [],
       zyId: "",
+      selectedXy: [],
+      xyId: "",
       selectedNj: [],
       disableMixinCreated: true,
       role: "",
@@ -335,7 +355,7 @@ export default {
         console.log("role " + role)
         that.role = role
         this.role = role
-        if(role === "STUDENT"){
+        if (role === "STUDENT") {
           this.searchQuery()
         }
       })
@@ -355,10 +375,31 @@ export default {
         .then(res => this.selectedNj = res.result)
       getAction("/zy/zyfZy/queryall")
         .then(res => this.selectedZy = res.result)
+      getAction("/xy/zyfXy/queryall")
+        .then(res => this.selectedXy = res.result)
       // getAction("/bj/zyfBj/queryall")
       //   .then(res => this.selectedBj = res.result)
       // getAction("/kc/zyfKc/queryall")
+
       //   .then(res => this.selectedKc = res.result)
+    },
+    changeXy() {
+      let obj = {xyId: this.queryParam.xyId}
+      getAction("/zy/zyfZy/queryall", obj)
+        .then(res => this.selectedZy = res.result)
+    },
+    changeZy() {
+      let obj = {
+        zyId: this.queryParam.zyId
+        , njId: this.queryParam.njId
+      }
+      getAction("/bj/zyfBj/queryall", obj)
+        .then(res => this.selectedBj = res.result)
+      getAction("/kc/zyfKc/queryall", obj)
+        .then(res => this.selectedKc = res.result)
+    },
+    changeNj() {
+      this.changeZy()
     },
     // () {
     //   let obj = {zyId: this.queryParam.zyId}

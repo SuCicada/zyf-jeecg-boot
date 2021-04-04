@@ -92,8 +92,8 @@
         </template>
 
         <span slot="actions" slot-scope="text, record">
-          <a v-bind:href="'http://localhost:8080/jeecg-boot/sys/common/static/'+text">
-            {{ text.split("/")[1] }}
+          <a v-bind:href="text.startsWith('http')?text:'/sys/common/static/'+text">
+            {{ text.substr(text.lastIndexOf("/") + 1) }}
           </a>
           <!--          {{ record }}-->
           <!--          <a-tag v-for="(action, index) in record.actionList" :key="index">-->
