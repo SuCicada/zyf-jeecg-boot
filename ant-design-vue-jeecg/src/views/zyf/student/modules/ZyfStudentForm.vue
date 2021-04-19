@@ -51,50 +51,50 @@
               <a-select-option :value="2">女</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="学院" :labelCol="labelCol" :wrapperCol="wrapperCol">
-            <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
-            <a-select
-              mode="default"
-              style="width: 100%"
-              placeholder="请选择学院"
-              v-model="xyId"
-              v-decorator="['xyName']"
-              optionFilterProp="children"
-            >
-              <a-select-option v-for="(xy,index) in selectedXy " :key="index.toString()" :value="xy.id">
-                {{ xy.xyName }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">
-            <!--              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />-->
-            <a-select
-              mode="default"
-              style="width: 100%"
-              placeholder="请选择专业"
-              v-model="queryParam.zyId"
-              v-decorator="['zyName']"
-              optionFilterProp="children"
-            >
-              <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">
-                {{ zy.zyName }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">
-            <a-select
-              mode="default"
-              style="width: 100%"
-              placeholder="请选择年级"
-              v-model="queryParam.njId"
-              v-decorator="['njName']"
-              optionFilterProp="children"
-            >
-              <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">
-                {{ nj.njName }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
+<!--          <a-form-item label="学院" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+<!--            &lt;!&ndash;              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />&ndash;&gt;-->
+<!--            <a-select-->
+<!--              mode="default"-->
+<!--              style="width: 100%"-->
+<!--              placeholder="请选择学院"-->
+<!--              v-model="xyId"-->
+<!--              v-decorator="['xyName']"-->
+<!--              optionFilterProp="children"-->
+<!--            >-->
+<!--              <a-select-option v-for="(xy,index) in selectedXy " :key="index.toString()" :value="xy.id">-->
+<!--                {{ xy.xyName }}-->
+<!--              </a-select-option>-->
+<!--            </a-select>-->
+<!--          </a-form-item>-->
+<!--          <a-form-item label="专业" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+<!--            &lt;!&ndash;              <j-dict-select-tag type="list" v-decorator="['zyId']" :trigger-change="true" dictCode="" placeholder="请选择专业id" />&ndash;&gt;-->
+<!--            <a-select-->
+<!--              mode="default"-->
+<!--              style="width: 100%"-->
+<!--              placeholder="请选择专业"-->
+<!--              v-model="queryParam.zyId"-->
+<!--              v-decorator="['zyName']"-->
+<!--              optionFilterProp="children"-->
+<!--            >-->
+<!--              <a-select-option v-for="(zy,index) in selectedZy " :key="index.toString()" :value="zy.id">-->
+<!--                {{ zy.zyName }}-->
+<!--              </a-select-option>-->
+<!--            </a-select>-->
+<!--          </a-form-item>-->
+<!--          <a-form-item label="年级" :labelCol="labelCol" :wrapperCol="wrapperCol">-->
+<!--            <a-select-->
+<!--              mode="default"-->
+<!--              style="width: 100%"-->
+<!--              placeholder="请选择年级"-->
+<!--              v-model="queryParam.njId"-->
+<!--              v-decorator="['njName']"-->
+<!--              optionFilterProp="children"-->
+<!--            >-->
+<!--              <a-select-option v-for="(nj,index) in selectedNj " :key="index.toString()" :value="nj.id">-->
+<!--                {{ nj.njName }}-->
+<!--              </a-select-option>-->
+<!--            </a-select>-->
+<!--          </a-form-item>-->
           <a-form-item label="班级" :labelCol="labelCol" :wrapperCol="wrapperCol">
             <a-select
               mode="default"
@@ -120,18 +120,18 @@
 <script>
 
 import {httpAction, getAction} from '@/api/manage'
-import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+// import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import pick from 'lodash.pick'
 import {validateDuplicateValue} from '@/utils/util'
 import moment from 'moment'
 import {addUser, editUser, queryUserRole, queryall, duplicateCheck} from '@/api/api'
-import {mixinDevice} from "@/utils/mixin";
-import ZyfStudentModal from './ZyfStudentModal'
+// import {mixinDevice} from "@/utils/mixin";
+// import ZyfStudentModal from './ZyfStudentModal'
 
 export default {
   name: 'ZyfStudentForm',
-  mixins: [JeecgListMixin, mixinDevice],
-  components: {ZyfStudentModal},
+  // mixins: [JeecgListMixin, mixinDevice],
+  components: {},
   props: {
     //流程表单data
     formData: {
@@ -245,8 +245,8 @@ export default {
   created() {
     //如果是流程中表单，则需要加载流程表单data
     this.showFlowData();
-    this.initSelected()
-    let that = this
+    // this.initSelected()
+    // let that = this
     // setInterval(function () {
     //   that.changeXy2()
     //   that.changeZy()

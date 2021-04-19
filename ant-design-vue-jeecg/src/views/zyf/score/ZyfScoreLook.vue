@@ -291,7 +291,12 @@ export default {
         //   width: 147,
         //   scopedSlots: {customRender: 'action'}
         // }
-      ], labelCol: {
+      ],
+      isorter: {
+        column: 'score',
+        order: 'desc',
+      },
+      labelCol: {
         xs: {span: 24},
         sm: {span: 5},
       },

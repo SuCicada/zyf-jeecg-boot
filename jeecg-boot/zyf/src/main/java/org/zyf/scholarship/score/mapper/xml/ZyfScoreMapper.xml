@@ -96,6 +96,7 @@
         select sys_user.id as studentId
         , zyf_score.score
         , zyf_kc.kc_name as kcName
+        , zyf_kc.id as kcId
         from zyf_score,
         sys_user,
         zyf_kc
@@ -243,6 +244,9 @@
         from temp_score,
         temp_bj
         where temp_score.studentId = temp_bj.studentId
+        <if test="query.kcId != null and query.kcId != ''">
+            and temp_score.kcId = #{query.kcId}
+        </if>
         and temp_bj.bjId in (
         <foreach collection="bjIdList" separator="," item="bjId">
             #{bjId}

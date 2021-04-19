@@ -7,7 +7,8 @@
         from sys_user,
         sys_user_role,
         zyf_bj
-        where sys_user.id = sys_user_role.user_id
+        where sys_user.del_flag = 0
+        and sys_user.id = sys_user_role.user_id
         and sys_user_role.role_id = '1361357450112102402'
         and zyf_bj.id = org_code
         <if test="query.zyId != null and query.zyId != ''">

@@ -175,8 +175,8 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            formData.studentId = that.studentId
-            formData.kcId = that.kcId
+            if(that.studentId) formData.studentId = that.studentId
+            if(that.kcId) formData.kcId = that.kcId
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

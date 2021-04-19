@@ -215,7 +215,9 @@ export default {
           this.record = res['result']
           let sex = this.record['sex']
           this.record.sexStr = sex === '1' ? "男" : "女";
-          this.record.birthday = this.record.birthday.split(" ")[0]
+          if (this.record.birthday) {
+            this.record.birthday = this.record.birthday.split(" ")[0]
+          }
           that.role = res['result']['role']
           console.log(this.record)
           this.edit(this.record)

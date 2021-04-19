@@ -3,6 +3,7 @@
 <mapper namespace="org.zyf.scholarship.zy.mapper.ZyfZyMapper">
     <select id="queryPageList" resultType="java.util.Map">
         select zyf_zy.id as id, zy_name as zyName, xy_name as xyName
+        ,zyf_zy.xy_id as xyId
         from zyf_zy, zyf_xy
         <where>
             zyf_zy.xy_id = zyf_xy.id

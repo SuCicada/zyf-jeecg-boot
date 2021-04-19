@@ -2,7 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zyf.scholarship.bj.mapper.ZyfBjMapper">
     <select id="queryPageList" resultType="java.util.Map">
-        select zyf_bj.id as id, zyf_bj.bj_name as bjName, zyf_zy.zy_name as zyName, zyf_nj.nj_name as njName
+        select zyf_bj.id as id
+        , zyf_bj.bj_name as bjName
+        , zyf_zy.zy_name as zyName
+        , zyf_nj.nj_name as njName
+        ,zyf_bj.zy_id as zyId
+        ,zyf_bj.nj_id as njId
         from zyf_bj, zyf_nj, zyf_zy
         <where>
             zyf_bj.zy_id = zyf_zy.id

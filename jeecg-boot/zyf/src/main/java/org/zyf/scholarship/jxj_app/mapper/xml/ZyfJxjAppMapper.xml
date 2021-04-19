@@ -89,9 +89,9 @@
     <update id="autoInitAccepted" parameterType="java.util.List">
         UPDATE zyf.zyf_jxj_app t
         SET t.accepted = 1
-        WHERE t.id in(
-        <foreach collection="appIdList" separator="," item="appId">
-            #{appId}
+        WHERE t.id in(''
+        <foreach collection="appIdList" item="appId">
+            ,#{appId}
         </foreach>
         )
     </update>
