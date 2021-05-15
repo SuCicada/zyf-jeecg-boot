@@ -24,14 +24,17 @@
         and zyf_score.student_id = sys_user.id
         and zyf_bj.id = sys_user.org_code
         and zyf_nj.id =zyf_bj.nj_id
-        <if test="query.studentId != null and query.studentId != ''">
-            and sys_user.id = #{query.studentId}
-        </if>
-        <if test="query.workNo != null and query.workNo != ''">
-            and sys_user.work_no = #{query.workNo}
-        </if>
-        <if test="query.studentName != null and query.studentName != ''">
-            and sys_user.realname like #{query.studentName}
+        <!--    不查看班级的时候， 才单独匹配一个人   -->
+        <if test="query.look != 'bj' ">
+            <if test="query.studentId != null and query.studentId != ''">
+                and sys_user.id = #{query.studentId}
+            </if>
+            <if test="query.workNo != null and query.workNo != ''">
+                and sys_user.work_no = #{query.workNo}
+            </if>
+            <if test="query.studentName != null and query.studentName != ''">
+                and sys_user.realname like #{query.studentName}
+            </if>
         </if>
         <if test="query.kcName != null and query.kcName != ''">
             and kc_name like #{query.kcName}

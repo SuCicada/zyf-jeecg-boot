@@ -317,7 +317,7 @@ export default {
       disableMixinCreated: true,
       role: "",
       url: {
-        list: "/score/zyfScore/list",
+        list: "/score/zyfScore/list?look=bj",
         delete: "/score/zyfScore/delete",
         deleteBatch: "/score/zyfScore/deleteBatch",
         exportXlsUrl: "/score/zyfScore/exportXls",

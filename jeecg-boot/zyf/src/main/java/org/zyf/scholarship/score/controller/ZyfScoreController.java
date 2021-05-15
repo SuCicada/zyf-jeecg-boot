@@ -155,7 +155,7 @@ public class ZyfScoreController extends JeecgController<ZyfScore, IZyfScoreServi
                 .filter(a -> a.getKey().startsWith("bjId"))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
-        list = zyfZcScoreMapper.queryBjKcScoreSortChart(list, bjIdList);
+        list = zyfZcScoreMapper.queryBjKcScoreSortChart(list, map, bjIdList);
 
         Set<String> fields = new HashSet();
         Map<String, Map<String, Object>> temp = new HashMap();

@@ -199,6 +199,7 @@ import {mixinDevice} from '@/utils/mixin'
 import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import ZyfScoreModal from './modules/ZyfScoreModal'
 import {getAction} from "@api/manage";
+import store from '@/store'
 
 export default {
   name: 'ViserChartDemo',
@@ -233,6 +234,7 @@ export default {
       bjId1: "",
       bjId2: "",
       isZyPage:false,
+      role: "",
     }
   },
   created() {
@@ -242,6 +244,7 @@ export default {
     //   this.loadRankListData()
     // }, 100)
     this.initSelected()
+    this.getRole()
   },
   methods: {
     /**
@@ -256,6 +259,18 @@ export default {
         .then(res => this.selectedBj = res.result)
       getAction("/kc/zyfKc/queryall")
         .then(res => this.selectedKc = res.result)
+    },
+    getRole() {
+      let userId = store.getters.userInfo.id
+      let obj = {userId: userId}
+      let that = this
+      getAction("/zyf/util/queryUserRole", obj)
+        .then(res => {
+          let role = res.result
+          console.log("role " + role)
+          that.role = role
+          this.role = role
+        })
     },
     changeZy() {
       let obj = {

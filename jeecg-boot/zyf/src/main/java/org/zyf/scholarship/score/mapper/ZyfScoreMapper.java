@@ -18,14 +18,14 @@ public interface ZyfScoreMapper extends BaseMapper<ZyfScore> {
 
     void initView();
 
-    IPage<Map<String, Object>> queryPageList(IPage<Map<String, Object>> a, Map<String, String> query);
+    IPage<Map<String, Object>>  queryPageList(IPage<Map<String, Object>> a, Map<String, String> query);
 
     /**
      * 综测班级成绩排名图表数据
      */
     List<Map<String, String>> queryBjScoreSortChart(List<Map<String, String>> a, Map<String, String> query);
 
-    List<Map<String, Object>> queryBjKcScoreSortChart(List<Map<String, Object>> a, List<String> bjIdList);
+    List<Map<String, Object>> queryBjKcScoreSortChart(List<Map<String, Object>> a,Map<String, String> query, List<String> bjIdList);
 
     List<Map<String, Object>> queryZcScoreList(List<Map<String, Object>> a, Map<String, String> query);
 
